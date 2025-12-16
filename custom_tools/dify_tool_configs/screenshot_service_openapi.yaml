@@ -1,0 +1,133 @@
+openapi: 3.0.0
+info:
+  title: Screenshot Service
+  description: Visual analysis service for website design evaluation.
+  version: 1.0.0
+
+servers:
+  - url: http://screenshot-service:8004
+    description: Docker internal
+  - url: http://localhost:8004
+    description: Local development
+
+paths:
+  /analyze:
+    post:
+      operationId: analyzeVisual
+      summary: Analyze website visual design
+      description: Capture screenshot and analyze website visual quality.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - url
+              properties:
+                url:
+                  type: string
+                  description: Website URL to analyze
+                include_mobile:
+                  type: boolean
+                  description: Include mobile screenshot
+                  default: true
+                include_screenshots:
+                  type: boolean
+                  description: Include base64 screenshots in response
+                  default: false
+                lead_id:
+                  type: string
+                  description: Lead ID for tracking
+      responses:
+        '200':
+          description: Visual analysis result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VisualAnalysisResult'
+
+  /screenshot:
+    post:
+      operationId: captureScreenshot
+      summary: Capture website screenshot
+      description: Capture a screenshot and return as PNG.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - url
+              properties:
+                url:
+                  type: string
+                  description: Website URL to capture
+                viewport_width:
+                  type: integer
+                  description: Browser viewport width
+                  default: 1920
+                viewport_height:
+                  type: integer
+                  description: Browser viewport height
+                  default: 1080
+                full_page:
+                  type: boolean
+                  description: Capture full scrollable page
+                  default: false
+      responses:
+        '200':
+          description: PNG screenshot
+          content:
+            image/png:
+              schema:
+                type: string
+                format: binary
+
+components:
+  schemas:
+    VisualAnalysisResult:
+      type: object
+      properties:
+        visual_score:
+          type: integer
+          description: 1-100 design quality rating
+        design_era:
+          type: string
+          description: Modern, Dated, Legacy, or Template
+        has_hero_image:
+          type: boolean
+        has_clear_cta:
+          type: boolean
+        color_scheme:
+          type: string
+          description: Professional, Amateur, or Template
+        mobile_responsive:
+          type: boolean
+        social_links:
+          type: object
+          properties:
+            facebook:
+              type: string
+            instagram:
+              type: string
+            linkedin:
+              type: string
+            youtube:
+              type: string
+        trust_signals:
+          type: integer
+          description: Count of visible trust badges
+        url:
+          type: string
+        lead_id:
+          type: string
+        screenshot_desktop_base64:
+          type: string
+          description: Base64 encoded desktop screenshot (if requested)
+        screenshot_mobile_base64:
+          type: string
+          description: Base64 encoded mobile screenshot (if requested)
+        error:
+          type: string
