@@ -2,7 +2,9 @@ import google.generativeai as genai
 import os
 
 # Get API key
-api_key = os.getenv("GOOGLE_GEMINI_API_KEY", "REDACTED")
+api_key = os.getenv("GOOGLE_GEMINI_API_KEY")
+if not api_key:
+    raise ValueError("GOOGLE_GEMINI_API_KEY environment variable is required")
 print(f"Using API key: {api_key[:20]}...{api_key[-10:]}")
 
 # Configure Gemini
