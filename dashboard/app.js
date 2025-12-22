@@ -1,7 +1,6 @@
 // Rise Local Lead Discovery Dashboard
-// Supabase Configuration
-const SUPABASE_URL = 'https://jitawzicdwgbhatvjblh.supabase.co';
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImppdGF3emljZHdnYmhhdHZqYmxoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ2OTg3MDcsImV4cCI6MjA4MDI3NDcwN30.CVTbb96ShtOZr8MqT76SpZDtRK9Rr2X18Y6tcS0DiwE';
+// SECURITY: Credentials are now fetched from secure backend API
+// No hardcoded API keys - implements secure authentication
 
 // Default franchise blocklist
 const DEFAULT_FRANCHISES = [
@@ -100,9 +99,38 @@ async function init() {
         return;
     }
 
-    // Initialize Supabase
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-    console.log('Supabase client initialized');
+    // Initialize auth manager with secure credentials
+    try {
+        const isAuthenticated = await window.authManager.init();
+
+        if (!isAuthenticated) {
+            // Redirect to login if not authenticated
+            window.location.href = 'login.html';
+            return;
+        }
+
+        // Get authenticated Supabase client
+        supabase = window.authManager.getClient();
+        console.log('Supabase client initialized with secure auth');
+
+        // Display logged-in user info
+        const user = window.authManager.getCurrentUser();
+        console.log('Logged in as:', user.email);
+
+        // Update UI with user email
+        const userEmailElement = document.getElementById('user-email');
+        if (userEmailElement) {
+            userEmailElement.textContent = user.email;
+        }
+
+    } catch (error) {
+        console.error('Authentication failed:', error);
+        showToast('Authentication error - redirecting to login', 'error');
+        setTimeout(() => {
+            window.location.href = 'login.html';
+        }, 2000);
+        return;
+    }
 
     // Load saved franchise list from localStorage
     const savedFranchises = localStorage.getItem('franchiseList');
@@ -147,6 +175,19 @@ async function init() {
 
 // Event Listeners
 function setupEventListeners() {
+    // Logout
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', async () => {
+            const result = await window.authManager.signOut();
+            if (result.success) {
+                window.location.href = 'login.html';
+            } else {
+                showToast('Logout failed: ' + result.error, 'error');
+            }
+        });
+    }
+
     // Discovery
     elements.runDiscovery.addEventListener('click', runDiscovery);
     elements.refreshJobs.addEventListener('click', loadRecentJobs);
