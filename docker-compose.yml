@@ -1,0 +1,241 @@
+# Rise Local Lead Creation - Complete Stack
+# Includes all microservices + MCP server for agent orchestration
+
+version: '3.8'
+
+services:
+  # ============================================================================
+  # MCP SERVER - Agent Tool Gateway
+  # ============================================================================
+  mcp-server:
+    build:
+      context: ./mcp_server
+      dockerfile: Dockerfile
+    container_name: mcp-server
+    ports:
+      - "8000:8000"
+    environment:
+      - TDLR_SCRAPER_URL=http://tdlr-scraper:8001
+      - BBB_SCRAPER_URL=http://bbb-scraper:8002
+      - PAGESPEED_API_URL=http://pagespeed-api:8003
+      - SCREENSHOT_SERVICE_URL=http://screenshot-service:8004
+      - OWNER_EXTRACTOR_URL=http://owner-extractor:8005
+      - ADDRESS_VERIFIER_URL=http://address-verifier:8006
+      - LOG_LEVEL=INFO
+    restart: unless-stopped
+    networks:
+      - riselocal
+    depends_on:
+      - tdlr-scraper
+      - bbb-scraper
+      - pagespeed-api
+      - screenshot-service
+      - owner-extractor
+      - address-verifier
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  # ============================================================================
+  # CLAUDE QUALIFICATION AGENT - Intelligent Lead Qualification
+  # ============================================================================
+  claude-agent:
+    build:
+      context: ./agents
+      dockerfile: Dockerfile
+    container_name: claude-agent
+    ports:
+      - "8080:8080"
+    environment:
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - ANTHROPIC_MODEL=${ANTHROPIC_MODEL:-claude-opus-4-5-20251101}
+      - MCP_SERVER_URL=http://mcp-server:8000
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
+      - PORT=8080
+      - LOG_LEVEL=INFO
+    restart: unless-stopped
+    networks:
+      - riselocal
+    depends_on:
+      - mcp-server
+    healthcheck:
+      test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8080/health', timeout=5.0)"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # ============================================================================
+  # INTELLIGENCE MICROSERVICES (6 services)
+  # ============================================================================
+
+  # Phase 2D: TDLR License Verification
+  tdlr-scraper:
+    build:
+      context: ./custom_tools/tdlr_scraper
+      dockerfile: Dockerfile
+    container_name: tdlr-scraper
+    ports:
+      - "8001:8001"
+    restart: unless-stopped
+    networks:
+      - riselocal
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Phase 2E: BBB Reputation Analysis
+  bbb-scraper:
+    build:
+      context: ./custom_tools/bbb_scraper
+      dockerfile: Dockerfile
+    container_name: bbb-scraper
+    ports:
+      - "8002:8002"
+    restart: unless-stopped
+    networks:
+      - riselocal
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Phase 2B: PageSpeed Technical Scores
+  pagespeed-api:
+    build:
+      context: ./custom_tools/pagespeed_api
+      dockerfile: Dockerfile
+    container_name: pagespeed-api
+    ports:
+      - "8003:8003"
+    environment:
+      - GOOGLE_PAGESPEED_API_KEY=${GOOGLE_PAGESPEED_API_KEY:-}
+    restart: unless-stopped
+    networks:
+      - riselocal
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8003/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Phase 2A: Visual Analysis
+  screenshot-service:
+    build:
+      context: ./custom_tools/screenshot_service
+      dockerfile: Dockerfile
+    container_name: screenshot-service
+    ports:
+      - "8004:8004"
+    environment:
+      - GOOGLE_GEMINI_API_KEY=${GOOGLE_GEMINI_API_KEY:-}
+    restart: unless-stopped
+    networks:
+      - riselocal
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8004/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Phase 2D-Enhanced: Owner Extraction from Website
+  owner-extractor:
+    build:
+      context: ./custom_tools/owner_extractor
+      dockerfile: Dockerfile
+    container_name: owner-extractor
+    ports:
+      - "8005:8005"
+    environment:
+      - GOOGLE_GEMINI_API_KEY=${GOOGLE_GEMINI_API_KEY:-}
+    restart: unless-stopped
+    networks:
+      - riselocal
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8005/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Phase 2F: Address Verification (Residential vs Commercial)
+  address-verifier:
+    build:
+      context: ./custom_tools/address_verifier
+      dockerfile: Dockerfile
+    container_name: address-verifier
+    ports:
+      - "8006:8006"
+    environment:
+      - SMARTY_AUTH_ID=${SMARTY_AUTH_ID:-}
+      - SMARTY_AUTH_TOKEN=${SMARTY_AUTH_TOKEN:-}
+    restart: unless-stopped
+    networks:
+      - riselocal
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8006/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  riselocal:
+    driver: bridge
+
+# ==============================================================================
+# USAGE INSTRUCTIONS
+# ==============================================================================
+#
+# Start all services:
+#   docker compose up -d
+#
+# Start only microservices (without MCP):
+#   docker compose up -d tdlr-scraper bbb-scraper pagespeed-api screenshot-service owner-extractor address-verifier
+#
+# Start only MCP server (requires microservices running):
+#   docker compose up -d mcp-server
+#
+# View logs:
+#   docker compose logs -f mcp-server
+#   docker compose logs -f tdlr-scraper
+#
+# Check health:
+#   curl http://localhost:8000/health  # MCP server (when HTTP wrapper added)
+#   docker compose ps
+#
+# Stop all services:
+#   docker compose down
+#
+# ==============================================================================
+# SERVICE ENDPOINTS
+# ==============================================================================
+#
+# Claude Agent API: http://localhost:8080 (Docs: http://localhost:8080/docs)
+# MCP Server: http://localhost:8000 (HTTP wrapper)
+# TDLR Scraper: http://localhost:8001
+# BBB Scraper: http://localhost:8002
+# PageSpeed API: http://localhost:8003
+# Screenshot Service: http://localhost:8004
+# Owner Extractor: http://localhost:8005
+# Address Verifier: http://localhost:8006
+#
+# ==============================================================================
+# ENVIRONMENT VARIABLES
+# ==============================================================================
+#
+# Required (set in .env file):
+# - ANTHROPIC_API_KEY: Claude API key for qualification agent
+# - SUPABASE_URL: Supabase project URL
+# - SUPABASE_SERVICE_KEY: Supabase service role key
+# - GOOGLE_GEMINI_API_KEY: For screenshot and owner extraction
+# - GOOGLE_PAGESPEED_API_KEY: For higher rate limits (optional)
+# - SMARTY_AUTH_ID: Smarty API Auth ID (for address verification)
+# - SMARTY_AUTH_TOKEN: Smarty API Auth Token (for address verification)
+#
+# Optional:
+# - ANTHROPIC_MODEL: Claude model to use (default: claude-opus-4-5-20251101)
+#

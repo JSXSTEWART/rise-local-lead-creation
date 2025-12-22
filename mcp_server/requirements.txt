@@ -1,0 +1,16 @@
+# Rise Local MCP Server Dependencies
+
+# MCP SDK
+mcp>=0.9.0
+
+# HTTP client with async support
+httpx>=0.27.0
+
+# Async support
+asyncio-mqtt>=0.16.1
+
+# Logging and monitoring
+python-json-logger>=2.0.7
+
+# Environment variables
+python-dotenv>=1.0.0
