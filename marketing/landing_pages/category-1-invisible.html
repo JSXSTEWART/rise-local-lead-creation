@@ -1,0 +1,1066 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rise Local | The Future of Electrician Marketing</title>
+    <meta name="description" content="Stop being invisible. The premium digital infrastructure platform for elite electricians.">
+
+    <!-- Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        display: ['Oswald', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        rise: {
+                            blue: '#3535de',
+                            'blue-light': '#5555ff',
+                            navy: '#050510',
+                            'navy-light': '#0a0a1f',
+                            cyan: '#00d4ff',
+                            'cyan-light': '#5cefff',
+                            'cyan-dark': '#00a8cc',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Base */
+        * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; box-sizing: border-box; }
+        html, body { scroll-behavior: smooth; overflow-x: hidden; width: 100%; max-width: 100vw; }
+        ::selection { background: rgba(0, 212, 255, 0.3); }
+
+        /* Ultra Dark Background */
+        .gradient-bg {
+            background: radial-gradient(ellipse 80% 50% at 50% -20%, rgba(0, 212, 255, 0.12), transparent),
+                        radial-gradient(ellipse 60% 40% at 80% 60%, rgba(53, 53, 222, 0.08), transparent),
+                        #050510;
+            overflow-x: hidden;
+        }
+
+        /* Floating Orbs - Cyan themed */
+        .orb-container { position: fixed; inset: 0; overflow: hidden; pointer-events: none; z-index: 0; }
+        .orb { position: absolute; border-radius: 50%; filter: blur(100px); animation: float 25s ease-in-out infinite; }
+        .orb-1 { width: 300px; height: 300px; background: radial-gradient(circle, rgba(0,212,255,0.25) 0%, transparent 70%); top: -100px; left: -50px; }
+        .orb-2 { width: 250px; height: 250px; background: radial-gradient(circle, rgba(53,53,222,0.2) 0%, transparent 70%); top: 30%; right: -80px; animation-delay: -8s; }
+        .orb-3 { width: 200px; height: 200px; background: radial-gradient(circle, rgba(0,212,255,0.15) 0%, transparent 70%); bottom: 20%; left: 10%; animation-delay: -15s; }
+        @media (min-width: 768px) {
+            .orb-1 { width: 700px; height: 700px; top: -300px; left: -200px; }
+            .orb-2 { width: 500px; height: 500px; right: -150px; }
+            .orb-3 { width: 400px; height: 400px; }
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0); }
+            33% { transform: translate(20px, -20px); }
+            66% { transform: translate(-15px, 15px); }
+        }
+
+        /* Subtle Grid */
+        .grid-bg {
+            background-image:
+                linear-gradient(rgba(0,212,255,0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0,212,255,0.03) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        /* Noise texture - very subtle */
+        .noise::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+            opacity: 0.015;
+            pointer-events: none;
+            z-index: 1000;
+        }
+
+        /* Animations */
+        .fade-in { animation: fadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; }
+        .fade-in-delay-1 { animation-delay: 0.1s; }
+        .fade-in-delay-2 { animation-delay: 0.2s; }
+        .fade-in-delay-3 { animation-delay: 0.3s; }
+        .fade-in-delay-4 { animation-delay: 0.4s; }
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        .slide-up { animation: slideUp 1s cubic-bezier(0.16, 1, 0.3, 1) forwards; opacity: 0; transform: translateY(30px); }
+        .slide-up-delay-1 { animation-delay: 0.15s; }
+        .slide-up-delay-2 { animation-delay: 0.3s; }
+        .slide-up-delay-3 { animation-delay: 0.45s; }
+        @keyframes slideUp { to { opacity: 1; transform: translateY(0); } }
+
+        .reveal { opacity: 0; transform: translateY(40px); transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Gradient Text */
+        .text-gradient-white {
+            background: linear-gradient(180deg, #fff 0%, rgba(255,255,255,0.6) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .text-gradient-cyan {
+            background: linear-gradient(135deg, #00d4ff 0%, #5cefff 50%, #00d4ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Glow Effects */
+        .glow-cyan { text-shadow: 0 0 40px rgba(0,212,255,0.5), 0 0 80px rgba(0,212,255,0.3); }
+        .glow-box { box-shadow: 0 0 60px -10px rgba(0,212,255,0.4); }
+
+        /* Glass Card - Refined */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.02);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .glass-card:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(0, 212, 255, 0.2);
+            transform: translateY(-4px);
+        }
+
+        /* Primary CTA Button */
+        .btn-primary {
+            background: linear-gradient(135deg, #00d4ff 0%, #00a8cc 100%);
+            color: #050510;
+            font-weight: 700;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .btn-primary::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, #5cefff 0%, #00d4ff 100%);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .btn-primary:hover::before { opacity: 1; }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 20px 40px -10px rgba(0, 212, 255, 0.5),
+                        0 0 60px -10px rgba(0, 212, 255, 0.4);
+        }
+        .btn-primary span { position: relative; z-index: 1; }
+
+        /* Secondary Button */
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+        .btn-secondary:hover {
+            border-color: rgba(0, 212, 255, 0.5);
+            background: rgba(0, 212, 255, 0.05);
+        }
+
+        /* Animated Border */
+        .animated-border {
+            position: relative;
+            background: rgba(0, 212, 255, 0.05);
+            padding: 1px;
+            border-radius: 20px;
+        }
+        .animated-border::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 20px;
+            padding: 1px;
+            background: linear-gradient(135deg, #00d4ff, #3535de, #00d4ff);
+            background-size: 200% 200%;
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            animation: borderGlow 4s linear infinite;
+            opacity: 0.5;
+        }
+        @keyframes borderGlow {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
+        }
+
+        /* Scanner Container */
+        .scanner-container {
+            background: linear-gradient(180deg, rgba(255,255,255,0.97) 0%, #fff 100%);
+            box-shadow: 0 0 0 1px rgba(0,0,0,0.03), 0 25px 50px -12px rgba(0,0,0,0.25), 0 0 100px -20px rgba(0,212,255,0.3);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #050510; }
+        ::-webkit-scrollbar-thumb { background: #00d4ff; border-radius: 3px; }
+
+        /* Stats */
+        .stat-number { font-variant-numeric: tabular-nums; }
+
+        /* Pulse ring animation */
+        .pulse-ring {
+            animation: pulseRing 2s ease-out infinite;
+        }
+        @keyframes pulseRing {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        /* Scanner iframe - responsive with mobile scaling */
+        .scanner-iframe {
+            height: 700px;
+            min-height: 700px;
+            width: 100%;
+        }
+        .scanner-wrapper {
+            width: 100%;
+            overflow: hidden;
+        }
+        @media (max-width: 767px) {
+            .scanner-wrapper {
+                /* Scale down the 920px form to fit mobile */
+                width: 920px;
+                transform: scale(0.42);
+                transform-origin: top left;
+                height: 700px;
+            }
+            .scanner-iframe {
+                width: 920px;
+                height: 1600px;
+                min-height: 1600px;
+            }
+            .scanner-container {
+                height: 680px;
+                overflow: hidden;
+            }
+        }
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .scanner-wrapper {
+                width: 920px;
+                transform: scale(0.75);
+                transform-origin: top left;
+            }
+            .scanner-iframe {
+                width: 920px;
+                height: 900px;
+            }
+            .scanner-container {
+                height: 680px;
+                overflow: hidden;
+            }
+        }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 767px) {
+            a, button { min-height: 48px; display: inline-flex; align-items: center; justify-content: center; }
+            section { padding-left: 20px; padding-right: 20px; }
+            .stat-number { font-size: 2.5rem !important; }
+            .max-w-7xl, .max-w-6xl, .max-w-5xl, .max-w-4xl { max-width: calc(100vw - 40px); }
+        }
+        @media (max-width: 375px) {
+            section { padding-left: 16px; padding-right: 16px; }
+            nav { padding-left: 16px; padding-right: 16px; }
+        }
+        @media (min-width: 768px) and (max-width: 1024px) {
+            a, button { min-height: 44px; }
+        }
+    </style>
+</head>
+<body class="bg-[#050510] text-white overflow-x-hidden">
+
+    <!-- Noise Overlay -->
+    <div class="noise"></div>
+
+    <!-- Main Container -->
+    <main class="gradient-bg grid-bg relative">
+
+        <!-- Floating Orbs -->
+        <div class="orb-container">
+            <div class="orb orb-1"></div>
+            <div class="orb orb-2"></div>
+            <div class="orb orb-3"></div>
+        </div>
+
+        <!-- HERO - EVERYTHING ABOVE THE FOLD -->
+        <section class="relative min-h-screen flex flex-col px-4 md:px-6">
+
+            <!-- Nav - Rise Local Branded -->
+            <nav class="relative z-50">
+                <!-- Top bar -->
+                <div class="bg-rise-blue/10 border-b border-rise-blue/20 py-2 px-6">
+                    <div class="max-w-7xl mx-auto flex justify-center md:justify-between items-center">
+                        <span class="hidden md:block text-white/50 text-xs">The #1 Digital Marketing Platform for Electricians</span>
+                        <div class="flex items-center gap-4">
+                            <span class="flex items-center gap-2 text-white/50 text-xs">
+                                <span class="w-1.5 h-1.5 bg-rise-cyan rounded-full animate-pulse"></span>
+                                3 spots left in <span class="dynamic-city">your area</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Main nav -->
+                <div class="px-6 py-4">
+                    <div class="max-w-7xl mx-auto flex justify-between items-center">
+                        <a href="https://riselocal.com" class="fade-in flex items-center gap-3">
+                            <img src="https://www.riselocal.com/wp-content/uploads/2021/05/Rise-Local-white-blue.png" alt="Rise Local" class="h-10 md:h-14 w-auto">
+                            <div class="hidden md:block border-l border-white/10 pl-3">
+                                <div class="text-white/40 text-xs uppercase tracking-widest">Electrician</div>
+                                <div class="text-white text-sm font-medium -mt-0.5">Visibility Platform</div>
+                            </div>
+                        </a>
+                        <a href="#scanner" class="fade-in fade-in-delay-2 btn-primary text-sm py-2.5 px-5 rounded-full font-semibold">
+                            <span>Free Visibility Scan</span>
+                        </a>
+                    </div>
+                </div>
+            </nav>
+
+            <!-- Hero Content - Centered -->
+            <div class="flex-1 flex items-center justify-center px-6 pb-8">
+                <div class="max-w-5xl mx-auto text-center">
+
+                    <!-- Badge -->
+                    <div class="slide-up inline-flex items-center gap-2 bg-white/5 border border-white/10 rounded-full px-4 py-2 mb-8">
+                        <svg class="w-4 h-4 text-rise-cyan" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+                        <span class="text-white/60 text-sm">Free 60-second visibility scan</span>
+                    </div>
+
+                    <!-- Main Headline -->
+                    <h1 class="slide-up slide-up-delay-1 font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase leading-[0.95] tracking-tight mb-6">
+                        <span class="text-gradient-white">Customers Are Searching.</span><br>
+                        <span class="text-gradient-cyan glow-cyan">Are They Finding You?</span>
+                    </h1>
+
+                    <!-- Value Prop -->
+                    <p class="slide-up slide-up-delay-2 text-lg md:text-xl text-white/50 max-w-2xl mx-auto mb-10 leading-relaxed">
+                        <span class="text-white/70">97% of homeowners</span> search online before hiring an electrician.
+                        See exactly where <span class="dynamic-company text-rise-cyan">your business</span> ranks in <span class="dynamic-city text-white/70">your area</span>.
+                    </p>
+
+                    <!-- CTA Group -->
+                    <div class="slide-up slide-up-delay-3 flex flex-col items-center gap-6">
+
+                        <!-- Primary CTA - Scroll to Scanner -->
+                        <a href="#scanner" class="btn-primary group font-display text-lg md:text-xl py-4 px-10 md:py-5 md:px-14 rounded-full uppercase tracking-wider flex items-center gap-3">
+                            <span>Check My Visibility</span>
+                            <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                        </a>
+
+                        <!-- Trust Indicators -->
+                        <div class="flex flex-wrap justify-center items-center gap-x-6 gap-y-2 text-white/30 text-sm">
+                            <span class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-rise-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                60-second scan
+                            </span>
+                            <span class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-rise-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                                50+ directories checked
+                            </span>
+                            <span class="flex items-center gap-2">
+                                <svg class="w-4 h-4 text-rise-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                                See your visibility score
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Stats Bar - Bottom of Hero -->
+            <div class="slide-up slide-up-delay-3 border-t border-white/5 bg-white/[0.02] backdrop-blur-sm">
+                <div class="max-w-5xl mx-auto px-6 py-6">
+                    <div class="grid grid-cols-3 gap-4 text-center">
+                        <div>
+                            <div class="text-2xl md:text-3xl lg:text-4xl font-display font-bold text-rise-cyan">97%</div>
+                            <div class="text-white/40 text-xs md:text-sm mt-1">of homeowners Google first</div>
+                        </div>
+                        <div class="border-x border-white/10">
+                            <div class="text-2xl md:text-3xl lg:text-4xl font-display font-bold text-white">75%</div>
+                            <div class="text-white/40 text-xs md:text-sm mt-1">only click the top 3 results</div>
+                        </div>
+                        <div>
+                            <div class="text-2xl md:text-3xl lg:text-4xl font-display font-bold text-white/30">0%</div>
+                            <div class="text-white/40 text-xs md:text-sm mt-1">look past page 1</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Scanner Section - THE CONVERSION POINT -->
+        <section id="scanner" class="relative py-12 md:py-20 px-4 md:px-6">
+            <div class="max-w-3xl mx-auto">
+
+                <div class="reveal text-center mb-8">
+                    <h2 class="font-display text-2xl md:text-3xl lg:text-4xl font-bold uppercase mb-3">
+                        <span class="text-gradient-white">Check Your Visibility</span>
+                    </h2>
+                    <p class="text-white/40 text-base md:text-lg">Enter your business info below to scan 50+ directories</p>
+                </div>
+
+                <div class="reveal">
+                    <!-- Premium Frame around iframe -->
+                    <div class="relative">
+                        <!-- Glow effect -->
+                        <div class="absolute -inset-1 bg-gradient-to-r from-rise-blue/30 via-rise-cyan/20 to-rise-blue/30 rounded-2xl blur-xl opacity-50"></div>
+
+                        <!-- Scanner container - responsive with scaling for mobile -->
+                        <div class="relative scanner-container rounded-xl md:rounded-2xl overflow-hidden border border-rise-blue/20">
+                            <div class="scanner-wrapper">
+                                <iframe
+                                    src="https://www.optimizelocation.com/partner/status26inc/diagnostic.html"
+                                    class="border-0 scanner-iframe"
+                                    title="Business Directory Scanner"
+                                ></iframe>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Rise Local Trust Badge -->
+                    <div class="flex justify-center mt-6">
+                        <div class="inline-flex items-center gap-2 bg-rise-blue/10 border border-rise-blue/20 rounded-full px-4 py-2">
+                            <img src="https://www.riselocal.com/wp-content/uploads/2021/05/Rise-Local-white-blue.png" alt="Rise Local" class="h-5">
+                            <span class="text-white/50 text-xs">Powered by Rise Local</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Problem Section - Realistic Google Mockup (LIGHT THEME) -->
+        <section class="relative py-16 md:py-24 px-4 md:px-6">
+            <div class="max-w-5xl mx-auto">
+
+                <div class="reveal text-center mb-10">
+                    <span class="text-rise-cyan text-sm font-bold uppercase tracking-widest mb-4 block">The Reality</span>
+                    <h2 class="font-display text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold uppercase leading-tight">
+                        <span class="text-gradient-white">This Is What Homeowners See</span><br>
+                        <span class="text-gradient-cyan">When They Search for You</span>
+                    </h2>
+                </div>
+
+                <!-- Realistic Google Search Mockup - LIGHT THEME -->
+                <div class="reveal max-w-3xl mx-auto">
+                    <!-- Browser Chrome (Dark) -->
+                    <div class="bg-[#3b3b3b] rounded-t-xl overflow-hidden">
+                        <!-- Browser Tab Bar -->
+                        <div class="flex items-center gap-2 px-3 py-2.5">
+                            <div class="flex gap-1.5">
+                                <div class="w-3 h-3 rounded-full bg-[#ed6a5e]"></div>
+                                <div class="w-3 h-3 rounded-full bg-[#f4bf4f]"></div>
+                                <div class="w-3 h-3 rounded-full bg-[#61c554]"></div>
+                            </div>
+                            <div class="flex-1 flex items-center gap-2 ml-4">
+                                <div class="bg-[#525252] rounded-lg px-4 py-1.5 text-white/90 text-xs flex items-center gap-2">
+                                    <svg class="w-3.5 h-3.5 text-white/60" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10"/></svg>
+                                    electrician <span class="dynamic-city text-white/60">your area</span> - Google
+                                </div>
+                            </div>
+                        </div>
+                        <!-- URL Bar -->
+                        <div class="flex items-center gap-3 px-3 py-2 bg-[#202020]">
+                            <div class="flex items-center gap-3">
+                                <svg class="w-4 h-4 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+                                <svg class="w-4 h-4 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+                                <svg class="w-4 h-4 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                            </div>
+                            <div class="flex-1 bg-[#3a3a3a] rounded-full px-4 py-1.5 flex items-center gap-2">
+                                <svg class="w-4 h-4 text-white/40" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+                                <span class="text-white/80 text-xs">google.com/search?q=electrician+<span class="dynamic-city">your+area</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Google Search Page - LIGHT THEME -->
+                    <div class="bg-white rounded-b-xl overflow-hidden shadow-2xl">
+                        <!-- Google Header -->
+                        <div class="px-4 md:px-6 py-3 border-b border-gray-200">
+                            <div class="flex items-center gap-6">
+                                <!-- Google Logo -->
+                                <div class="flex items-center text-xl font-medium">
+                                    <span class="text-[#4285f4]">G</span><span class="text-[#ea4335]">o</span><span class="text-[#fbbc05]">o</span><span class="text-[#4285f4]">g</span><span class="text-[#34a853]">l</span><span class="text-[#ea4335]">e</span>
+                                </div>
+                                <!-- Search Bar -->
+                                <div class="flex-1 max-w-xl">
+                                    <div class="bg-white rounded-full px-4 py-2.5 flex items-center gap-3 border border-gray-200 shadow-sm hover:shadow-md transition-shadow">
+                                        <span class="text-gray-800 text-sm">electrician <span class="dynamic-city">your area</span></span>
+                                        <div class="ml-auto flex items-center gap-3">
+                                            <svg class="w-5 h-5 text-[#4285f4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z"/></svg>
+                                            <svg class="w-5 h-5 text-[#4285f4]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Search Tabs -->
+                            <div class="flex items-center gap-4 mt-3 text-sm">
+                                <span class="text-[#1a73e8] border-b-2 border-[#1a73e8] pb-2 px-1 font-medium">All</span>
+                                <span class="text-gray-600 pb-2 px-1">Maps</span>
+                                <span class="text-gray-600 pb-2 px-1">Images</span>
+                                <span class="text-gray-600 pb-2 px-1">News</span>
+                                <span class="text-gray-600 pb-2 px-1">Shopping</span>
+                            </div>
+                        </div>
+
+                        <!-- Search Results Area -->
+                        <div class="p-4 md:p-6 bg-[#f8f9fa]">
+                            <div class="text-gray-500 text-xs mb-4">About 2,340,000 results (0.52 seconds)</div>
+
+                            <!-- Sponsored Label -->
+                            <div class="text-gray-600 text-xs mb-3 font-medium">Sponsored</div>
+
+                            <!-- Google Local Pack (Map + 3 Results) -->
+                            <div class="bg-white rounded-xl overflow-hidden border border-gray-200 shadow-sm mb-4">
+                                <!-- Map Preview - Light Theme -->
+                                <div class="relative h-32 md:h-40 overflow-hidden">
+                                    <!-- Realistic Light Map Background -->
+                                    <div class="absolute inset-0 bg-[#e5e3df]">
+                                        <!-- Water/Park areas -->
+                                        <div class="absolute top-0 right-0 w-1/3 h-1/2 bg-[#c5deb5] opacity-60"></div>
+                                        <div class="absolute bottom-0 left-0 w-1/4 h-1/3 bg-[#aadaff] opacity-50"></div>
+                                        <!-- Road Lines - White/Light Grey -->
+                                        <div class="absolute top-1/4 left-0 right-0 h-1 bg-white"></div>
+                                        <div class="absolute top-1/2 left-0 right-0 h-2 bg-[#fcd462]"></div>
+                                        <div class="absolute top-3/4 left-0 right-0 h-1 bg-white"></div>
+                                        <div class="absolute left-1/4 top-0 bottom-0 w-1 bg-white"></div>
+                                        <div class="absolute left-1/2 top-0 bottom-0 w-2 bg-[#fcd462]"></div>
+                                        <div class="absolute left-3/4 top-0 bottom-0 w-1 bg-white"></div>
+                                    </div>
+                                    <!-- Map Pins -->
+                                    <div class="absolute top-6 left-1/4 transform -translate-x-1/2">
+                                        <div class="w-7 h-7 bg-[#ea4335] rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg border-2 border-white">A</div>
+                                    </div>
+                                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+                                        <div class="w-7 h-7 bg-[#ea4335] rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg border-2 border-white">B</div>
+                                    </div>
+                                    <div class="absolute bottom-8 right-1/4 transform translate-x-1/2">
+                                        <div class="w-7 h-7 bg-[#ea4335] rounded-full flex items-center justify-center text-white text-xs font-bold shadow-lg border-2 border-white">C</div>
+                                    </div>
+                                    <!-- Map Controls -->
+                                    <div class="absolute top-2 right-2 flex flex-col gap-0.5 bg-white rounded shadow">
+                                        <div class="w-8 h-8 flex items-center justify-center text-gray-600 text-base border-b border-gray-200 cursor-pointer hover:bg-gray-50">+</div>
+                                        <div class="w-8 h-8 flex items-center justify-center text-gray-600 text-base cursor-pointer hover:bg-gray-50">−</div>
+                                    </div>
+                                </div>
+
+                                <!-- Local Results -->
+                                <div class="divide-y divide-gray-100">
+                                    <!-- Result 1 - Top Position -->
+                                    <div class="p-4 hover:bg-gray-50 transition-colors cursor-pointer">
+                                        <div class="flex items-start gap-3">
+                                            <div class="w-6 h-6 bg-[#ea4335] rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 mt-0.5">A</div>
+                                            <div class="flex-1 min-w-0">
+                                                <div class="flex items-center gap-2 flex-wrap">
+                                                    <span class="competitor-1 text-[#1a0dab] font-medium text-base hover:underline">Mister Sparky</span>
+                                                    <span class="bg-[#34a853] text-white text-xs px-2 py-0.5 rounded font-medium">GUARANTEED</span>
+                                                </div>
+                                                <div class="flex items-center gap-1 mt-1">
+                                                    <div class="flex">
+                                                        <svg class="w-3.5 h-3.5 text-[#fbbc05]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                                        <svg class="w-3.5 h-3.5 text-[#fbbc05]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                                        <svg class="w-3.5 h-3.5 text-[#fbbc05]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                                        <svg class="w-3.5 h-3.5 text-[#fbbc05]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                                        <svg class="w-3.5 h-3.5 text-[#fbbc05]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                                    </div>
+                                                    <span class="text-gray-600 text-sm">4.9 (847)</span>
+                                                    <span class="text-gray-400 text-sm">· Electrician</span>
+                                                </div>
+                                                <div class="text-gray-500 text-sm mt-1">Open 24 hours · <span class="dynamic-city">Your Area</span></div>
+                                            </div>
+                                            <div class="text-right flex-shrink-0">
+                                                <div class="text-[#1a73e8] text-sm font-medium">34% clicks</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Result 2 -->
+                                    <div class="p-4 hover:bg-gray-50 transition-colors cursor-pointer">
+                                        <div class="flex items-start gap-3">
+                                            <div class="w-6 h-6 bg-[#ea4335] rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 mt-0.5">B</div>
+                                            <div class="flex-1 min-w-0">
+                                                <div class="competitor-2 text-[#1a0dab] font-medium text-base hover:underline">ElectricMan Inc.</div>
+                                                <div class="flex items-center gap-1 mt-1">
+                                                    <div class="flex">
+                                                        <svg class="w-3.5 h-3.5 text-[#fbbc05]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                                        <svg class="w-3.5 h-3.5 text-[#fbbc05]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                                        <svg class="w-3.5 h-3.5 text-[#fbbc05]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                                        <svg class="w-3.5 h-3.5 text-[#fbbc05]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                                        <svg class="w-3.5 h-3.5 text-[#fbbc05]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                                    </div>
+                                                    <span class="text-gray-600 text-sm">4.8 (562)</span>
+                                                    <span class="text-gray-400 text-sm">· Electrician</span>
+                                                </div>
+                                                <div class="text-gray-500 text-sm mt-1">Open · Closes 6 PM · <span class="dynamic-city">Your Area</span></div>
+                                            </div>
+                                            <div class="text-right flex-shrink-0">
+                                                <div class="text-[#1a73e8]/70 text-sm">23% clicks</div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Result 3 -->
+                                    <div class="p-4 hover:bg-gray-50 transition-colors cursor-pointer">
+                                        <div class="flex items-start gap-3">
+                                            <div class="w-6 h-6 bg-[#ea4335] rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 mt-0.5">C</div>
+                                            <div class="flex-1 min-w-0">
+                                                <div class="competitor-3 text-[#1a0dab] font-medium text-base hover:underline">Milestone Electric</div>
+                                                <div class="flex items-center gap-1 mt-1">
+                                                    <div class="flex">
+                                                        <svg class="w-3.5 h-3.5 text-[#fbbc05]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                                        <svg class="w-3.5 h-3.5 text-[#fbbc05]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                                        <svg class="w-3.5 h-3.5 text-[#fbbc05]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                                        <svg class="w-3.5 h-3.5 text-[#fbbc05]" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                                        <svg class="w-3.5 h-3.5 text-gray-200" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                                                    </div>
+                                                    <span class="text-gray-600 text-sm">4.7 (423)</span>
+                                                    <span class="text-gray-400 text-sm">· Electrician</span>
+                                                </div>
+                                                <div class="text-gray-500 text-sm mt-1">Open · Closes 5 PM · <span class="dynamic-city">Your Area</span></div>
+                                            </div>
+                                            <div class="text-right flex-shrink-0">
+                                                <div class="text-[#1a73e8]/50 text-sm">18% clicks</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- More Places Link -->
+                                <div class="p-3 border-t border-gray-100 bg-white rounded-b-xl">
+                                    <div class="text-[#1a73e8] text-sm flex items-center gap-2 font-medium">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/></svg>
+                                        More places
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Where's Your Business - Outside Google Mockup -->
+                <div class="reveal max-w-3xl mx-auto mt-6">
+                    <div class="glass-card rounded-2xl p-6 md:p-8 text-center">
+                        <div class="text-white/40 text-sm uppercase tracking-wider mb-2">The Question</div>
+                        <h3 class="font-display text-2xl md:text-3xl font-bold text-white mb-3">Where's Your Business?</h3>
+                        <p class="text-white/50 text-base mb-6 max-w-md mx-auto">
+                            <span class="text-rise-cyan font-semibold">75% of clicks</span> go to the top 3 results. If you're not there, these companies are booking your jobs.
+                        </p>
+                        <a href="#scanner" class="btn-primary inline-flex items-center gap-2 text-base py-3 px-8 rounded-full font-semibold">
+                            <span>Check My Ranking</span>
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Solution Section - Streamlined -->
+        <section class="relative py-20 md:py-32 px-6 border-t border-white/5">
+            <div class="max-w-6xl mx-auto">
+
+                <div class="reveal text-center mb-16">
+                    <span class="text-rise-cyan text-sm font-bold uppercase tracking-widest mb-4 block">The Solution</span>
+                    <h2 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold uppercase leading-tight mb-6">
+                        <span class="text-gradient-white">The Rise Local</span>
+                        <span class="text-gradient-cyan">Engine</span>
+                    </h2>
+                    <p class="text-white/40 text-lg max-w-2xl mx-auto">A complete digital infrastructure that forces your way into the top 10.</p>
+                </div>
+
+                <!-- Solution Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+
+                    <!-- Card 1 -->
+                    <div class="reveal glass-card rounded-2xl p-6 md:p-8">
+                        <div class="w-12 h-12 bg-rise-cyan/10 border border-rise-cyan/20 rounded-xl flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6 text-rise-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                        </div>
+                        <h3 class="font-display text-xl md:text-2xl font-bold uppercase mb-3 text-white">The Asset</h3>
+                        <p class="text-white/40 text-sm leading-relaxed">A conversion-optimized website engineered to pass Google's Core Web Vitals.</p>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="reveal glass-card rounded-2xl p-6 md:p-8">
+                        <div class="w-12 h-12 bg-rise-cyan/10 border border-rise-cyan/20 rounded-xl flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6 text-rise-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                        </div>
+                        <h3 class="font-display text-xl md:text-2xl font-bold uppercase mb-3 text-white">The Traffic</h3>
+                        <p class="text-white/40 text-sm leading-relaxed">Google Guaranteed badge. Map pack domination. Be the first call.</p>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="reveal glass-card rounded-2xl p-6 md:p-8">
+                        <div class="w-12 h-12 bg-rise-cyan/10 border border-rise-cyan/20 rounded-xl flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6 text-rise-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                        </div>
+                        <h3 class="font-display text-xl md:text-2xl font-bold uppercase mb-3 text-white">The Ops</h3>
+                        <p class="text-white/40 text-sm leading-relaxed">Automated follow-ups. Review generation. Never lose a lead again.</p>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="reveal glass-card rounded-2xl p-6 md:p-8">
+                        <div class="w-12 h-12 bg-rise-cyan/10 border border-rise-cyan/20 rounded-xl flex items-center justify-center mb-5">
+                            <svg class="w-6 h-6 text-rise-cyan" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                        </div>
+                        <h3 class="font-display text-xl md:text-2xl font-bold uppercase mb-3 text-white">The Scale</h3>
+                        <p class="text-white/40 text-sm leading-relaxed">Targeted ad campaigns to keep your schedule full year-round.</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- Visual ROI Calculator Section -->
+        <section class="relative py-20 md:py-28 px-6 border-t border-white/5 overflow-hidden">
+
+            <!-- Background glow -->
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-96 bg-rise-cyan/5 blur-[150px] rounded-full pointer-events-none"></div>
+
+            <div class="max-w-5xl mx-auto relative">
+
+                <div class="reveal text-center mb-12">
+                    <div class="inline-flex items-center gap-2 bg-rise-cyan/10 border border-rise-cyan/20 text-rise-cyan px-4 py-2 rounded-full text-xs font-bold tracking-widest uppercase mb-6">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg>
+                        The Math That Matters
+                    </div>
+                    <h2 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold uppercase leading-tight">
+                        <span class="text-gradient-white">What Invisibility</span><br>
+                        <span class="text-gradient-cyan">Actually Costs You</span>
+                    </h2>
+                </div>
+
+                <!-- Visual Calculator -->
+                <div class="reveal">
+                    <div class="glass-card rounded-2xl md:rounded-3xl p-6 md:p-10 relative overflow-hidden">
+
+                        <!-- Animated corner accent -->
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-rise-cyan/20 to-transparent"></div>
+
+                        <!-- The Equation -->
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-4 items-center mb-10">
+
+                            <!-- Missed Jobs -->
+                            <div class="text-center p-6 bg-white/[0.02] rounded-2xl border border-white/5">
+                                <div class="text-white/40 text-sm uppercase tracking-wider mb-3">Missed Jobs / Month</div>
+                                <div class="font-display text-5xl md:text-6xl font-bold text-white roi-counter" data-value="2">0</div>
+                                <div class="text-white/30 text-xs mt-2">Just 2 per month</div>
+                            </div>
+
+                            <!-- Multiply Sign -->
+                            <div class="hidden md:flex items-center justify-center">
+                                <div class="w-12 h-12 bg-rise-cyan/10 rounded-full flex items-center justify-center border border-rise-cyan/20">
+                                    <span class="text-rise-cyan text-2xl font-bold">×</span>
+                                </div>
+                            </div>
+
+                            <!-- Average Job Value -->
+                            <div class="text-center p-6 bg-white/[0.02] rounded-2xl border border-white/5">
+                                <div class="text-white/40 text-sm uppercase tracking-wider mb-3">Avg Job Value</div>
+                                <div class="font-display text-5xl md:text-6xl font-bold text-white">
+                                    <span class="text-white/50">$</span><span class="roi-counter" data-value="2500">0</span>
+                                </div>
+                                <div class="text-white/30 text-xs mt-2">Panel upgrades, rewires</div>
+                            </div>
+
+                        </div>
+
+                        <!-- Equals Sign with Animation -->
+                        <div class="flex items-center justify-center gap-4 mb-10">
+                            <div class="flex-1 h-px bg-gradient-to-r from-transparent via-rise-cyan/30 to-transparent"></div>
+                            <div class="w-14 h-14 bg-rise-cyan/20 rounded-full flex items-center justify-center border border-rise-cyan/30 animate-pulse">
+                                <span class="text-rise-cyan text-2xl font-bold">=</span>
+                            </div>
+                            <div class="flex-1 h-px bg-gradient-to-l from-transparent via-rise-cyan/30 to-transparent"></div>
+                        </div>
+
+                        <!-- The Result - Annual Loss -->
+                        <div class="text-center">
+                            <div class="text-white/40 text-sm uppercase tracking-wider mb-4">You're Leaving On The Table Every Year</div>
+
+                            <!-- Big Number with Glow -->
+                            <div class="relative inline-block">
+                                <div class="absolute inset-0 bg-rise-cyan/30 blur-3xl rounded-full"></div>
+                                <div class="relative font-display text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold">
+                                    <span class="text-gradient-cyan glow-cyan">$<span class="roi-counter-annual" data-value="60000">0</span>+</span>
+                                </div>
+                            </div>
+
+                            <div class="text-white/50 text-base md:text-lg mt-4">per year in lost revenue</div>
+                        </div>
+
+                        <!-- Visual Money Bar -->
+                        <div class="mt-10 relative">
+                            <div class="flex items-center gap-3 mb-3">
+                                <span class="text-white/40 text-xs uppercase tracking-wider">Revenue flowing to competitors</span>
+                                <div class="flex-1 h-px bg-white/10"></div>
+                            </div>
+                            <div class="h-4 bg-white/5 rounded-full overflow-hidden">
+                                <div class="money-bar h-full bg-gradient-to-r from-rise-cyan via-rise-blue-light to-rise-cyan rounded-full" style="width: 0%; transition: width 2s ease-out;"></div>
+                            </div>
+                            <div class="flex justify-between mt-2 text-xs text-white/30">
+                                <span>$0</span>
+                                <span class="text-rise-cyan font-semibold">$60,000+</span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Bottom Context Cards -->
+                <div class="reveal grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8">
+                    <div class="glass-card rounded-xl p-5 text-center">
+                        <div class="text-rise-cyan font-display text-2xl font-bold mb-1">$5K</div>
+                        <div class="text-white/40 text-xs">Monthly Loss</div>
+                    </div>
+                    <div class="glass-card rounded-xl p-5 text-center border-rise-cyan/20">
+                        <div class="text-rise-cyan font-display text-2xl font-bold mb-1">1 Job</div>
+                        <div class="text-white/40 text-xs">Pays for Everything</div>
+                    </div>
+                    <div class="glass-card rounded-xl p-5 text-center">
+                        <div class="text-rise-cyan font-display text-2xl font-bold mb-1">60 sec</div>
+                        <div class="text-white/40 text-xs">To Find Out</div>
+                    </div>
+                </div>
+
+                <!-- Final Decision Point -->
+                <div class="reveal mt-12 text-center">
+                    <p class="text-white/50 text-lg md:text-xl mb-8 max-w-2xl mx-auto">
+                        Your competitors are visible. They're getting these calls.
+                        <span class="text-white font-semibold">The question is: how much longer will you let them?</span>
+                    </p>
+                    <a href="#scanner" class="btn-primary group font-display text-lg md:text-xl py-4 px-10 md:py-5 md:px-12 rounded-full uppercase tracking-wider inline-flex items-center gap-3">
+                        <span>See Where I Rank</span>
+                        <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+                    </a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ROI + Final CTA Combined -->
+        <section class="relative py-20 md:py-32 px-6 text-center">
+
+            <!-- Subtle Glow -->
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-64 bg-rise-cyan/10 blur-[120px] rounded-full pointer-events-none"></div>
+
+            <div class="max-w-3xl mx-auto relative reveal">
+
+                <div class="inline-flex items-center gap-2 bg-rise-cyan/10 border border-rise-cyan/20 text-rise-cyan px-4 py-2 rounded-full text-xs font-bold tracking-widest uppercase mb-8">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    One Job Pays For Everything
+                </div>
+
+                <h2 class="font-display text-3xl md:text-4xl lg:text-5xl font-bold uppercase mb-6">
+                    <span class="text-gradient-white">Ready to Get</span><br>
+                    <span class="text-gradient-cyan glow-cyan">Found?</span>
+                </h2>
+
+                <p class="text-white/40 text-lg md:text-xl mb-10 max-w-xl mx-auto">
+                    We only onboard <span class="text-white">5 new partners per month</span> in <span class="dynamic-city text-rise-cyan">your area</span>.
+                </p>
+
+                <a href="#scanner" class="btn-primary group font-display text-lg md:text-xl py-4 px-10 md:py-5 md:px-14 rounded-full uppercase tracking-wider inline-flex items-center gap-3">
+                    <span>Run My Free Scan</span>
+                    <svg class="w-5 h-5 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+                </a>
+
+                <p class="text-white/20 text-sm mt-6">60-second scan • See where you rank</p>
+            </div>
+        </section>
+
+        <!-- Footer - Rise Local Branded -->
+        <footer class="relative border-t border-white/5">
+            <!-- Main Footer -->
+            <div class="py-12 px-6">
+                <div class="max-w-6xl mx-auto">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-8">
+                        <!-- Logo & Tagline -->
+                        <div class="text-center md:text-left">
+                            <img src="https://www.riselocal.com/wp-content/uploads/2021/05/Rise-Local-white-blue.png" alt="Rise Local" class="h-12 md:h-14 mx-auto md:mx-0 mb-3">
+                            <p class="text-white/40 text-sm max-w-xs">The digital marketing platform built specifically for home service businesses.</p>
+                        </div>
+                        <!-- CTA -->
+                        <div class="text-center md:text-right">
+                            <p class="text-white/50 text-sm mb-3">Ready to dominate your local market?</p>
+                            <a href="#scanner" class="btn-primary text-sm py-3 px-6 rounded-full font-semibold inline-flex items-center gap-2">
+                                <span>Get Your Free Scan</span>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Bottom Bar -->
+            <div class="border-t border-white/5 py-4 px-6">
+                <div class="max-w-6xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-3">
+                    <div class="text-white/30 text-xs">&copy; 2025 Rise Local. All rights reserved.</div>
+                    <div class="flex items-center gap-6">
+                        <a href="https://riselocal.com/privacy" class="text-white/30 hover:text-white/50 text-xs transition-colors">Privacy Policy</a>
+                        <a href="https://riselocal.com/terms" class="text-white/30 hover:text-white/50 text-xs transition-colors">Terms of Service</a>
+                        <a href="https://riselocal.com" class="text-white/30 hover:text-white/50 text-xs transition-colors">riselocal.com</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </main>
+
+    <!-- Scripts -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+
+            // URL Parameter Personalization
+            const params = new URLSearchParams(window.location.search);
+            const city = params.get('city') || 'Your Area';
+            const company = params.get('company') || 'Your Business';
+
+            // Competitor data by city
+            const competitors = {
+                'Dallas': ['Mister Sparky Dallas', 'ElectricMan Inc.', 'Milestone Electric'],
+                'Austin': ['Mr. Electric Austin', 'Stan\'s Electric', 'Team Enoch'],
+                'Houston': ['Mister Sparky Houston', 'John Moore Services', 'ABC Home & Commercial'],
+                'San Antonio': ['Any Hour Electric', 'Goettl Air Conditioning', 'Jon Wayne Service'],
+                'default': ['Mister Sparky', 'Mr. Electric', 'Local Competitor']
+            };
+
+            // Get competitors for city (or default)
+            const cityKey = Object.keys(competitors).find(k => city.toLowerCase().includes(k.toLowerCase())) || 'default';
+            const cityCompetitors = competitors[cityKey];
+
+            // Update city placeholders
+            document.querySelectorAll('.dynamic-city').forEach(el => {
+                el.style.transition = 'opacity 0.5s ease';
+                el.style.opacity = '0';
+                setTimeout(() => { el.textContent = city; el.style.opacity = '1'; }, 300);
+            });
+
+            // Update company placeholders
+            document.querySelectorAll('.dynamic-company').forEach(el => {
+                el.style.transition = 'opacity 0.5s ease';
+                el.style.opacity = '0';
+                setTimeout(() => { el.textContent = company; el.style.opacity = '1'; }, 300);
+            });
+
+            // Update competitor names
+            document.querySelectorAll('.competitor-1').forEach(el => { el.textContent = cityCompetitors[0]; });
+            document.querySelectorAll('.competitor-2').forEach(el => { el.textContent = cityCompetitors[1]; });
+            document.querySelectorAll('.competitor-3').forEach(el => { el.textContent = cityCompetitors[2]; });
+
+            // Scroll Reveal
+            const revealElements = document.querySelectorAll('.reveal');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                    }
+                });
+            }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            // Smooth Scroll
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                });
+            });
+
+            // Subtle Parallax Orbs on Mouse Move (desktop only)
+            if (window.innerWidth > 768) {
+                document.addEventListener('mousemove', (e) => {
+                    const orbs = document.querySelectorAll('.orb');
+                    const x = (e.clientX / window.innerWidth - 0.5) * 2;
+                    const y = (e.clientY / window.innerHeight - 0.5) * 2;
+                    orbs.forEach((orb, i) => {
+                        const speed = (i + 1) * 10;
+                        orb.style.transform = `translate(${x * speed}px, ${y * speed}px)`;
+                    });
+                });
+            }
+
+            // ROI Counter Animation
+            function animateCounter(element, target, duration = 2000, isLarge = false) {
+                const start = 0;
+                const startTime = performance.now();
+
+                function update(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+
+                    // Easing function for smooth animation
+                    const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                    const current = Math.floor(start + (target - start) * easeOutQuart);
+
+                    // Format with commas for large numbers
+                    element.textContent = isLarge ? current.toLocaleString() : current;
+
+                    if (progress < 1) {
+                        requestAnimationFrame(update);
+                    }
+                }
+
+                requestAnimationFrame(update);
+            }
+
+            // Observe ROI section for counter animation
+            const roiSection = document.querySelector('.roi-counter');
+            if (roiSection) {
+                let roiAnimated = false;
+                const roiObserver = new IntersectionObserver((entries) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting && !roiAnimated) {
+                            roiAnimated = true;
+
+                            // Animate small counters
+                            document.querySelectorAll('.roi-counter').forEach(counter => {
+                                const value = parseInt(counter.dataset.value);
+                                animateCounter(counter, value, 1500, value > 100);
+                            });
+
+                            // Animate annual counter with delay
+                            setTimeout(() => {
+                                document.querySelectorAll('.roi-counter-annual').forEach(counter => {
+                                    const value = parseInt(counter.dataset.value);
+                                    animateCounter(counter, value, 2500, true);
+                                });
+
+                                // Animate money bar
+                                setTimeout(() => {
+                                    document.querySelectorAll('.money-bar').forEach(bar => {
+                                        bar.style.width = '100%';
+                                    });
+                                }, 500);
+                            }, 1000);
+                        }
+                    });
+                }, { threshold: 0.3 });
+
+                roiObserver.observe(roiSection.closest('section'));
+            }
+        });
+    </script>
+</body>
+</html>

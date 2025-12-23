@@ -1,0 +1,87 @@
+openapi: 3.0.0
+info:
+  title: BBB Scraper
+  description: Better Business Bureau reputation analysis. Extracts ratings, complaints, and calculates reputation gap.
+  version: 1.0.0
+
+servers:
+  - url: http://bbb-scraper:8002
+    description: Docker internal
+  - url: http://localhost:8002
+    description: Local development
+
+paths:
+  /search:
+    post:
+      operationId: searchBBB
+      summary: Search BBB for business
+      description: Search Better Business Bureau for business reputation data.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - business_name
+                - city
+              properties:
+                business_name:
+                  type: string
+                  description: Business name to search
+                city:
+                  type: string
+                  description: City name
+                state:
+                  type: string
+                  description: State code (default TX)
+                  default: TX
+                google_rating:
+                  type: number
+                  description: Google rating for reputation gap calculation
+                  default: 0.0
+                lead_id:
+                  type: string
+                  description: Lead ID for tracking
+      responses:
+        '200':
+          description: BBB search result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BBBResult'
+
+components:
+  schemas:
+    BBBResult:
+      type: object
+      properties:
+        bbb_rating:
+          type: string
+          description: A+, A, B, C, D, F, or NR (Not Rated)
+        bbb_accredited:
+          type: boolean
+        complaints_total:
+          type: integer
+        complaints_3yr:
+          type: integer
+          description: Complaints in last 3 years
+        complaints_resolved:
+          type: integer
+        reputation_gap:
+          type: number
+          description: Google rating minus BBB implied rating
+        years_in_business:
+          type: integer
+        business_name:
+          type: string
+        city:
+          type: string
+        state:
+          type: string
+        bbb_url:
+          type: string
+        lead_id:
+          type: string
+        error:
+          type: string

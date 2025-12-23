@@ -1,0 +1,120 @@
+openapi: 3.0.0
+info:
+  title: PageSpeed API
+  description: Google PageSpeed Insights integration for website performance analysis.
+  version: 1.0.0
+
+servers:
+  - url: http://pagespeed-api:8003
+    description: Docker internal
+  - url: http://localhost:8003
+    description: Local development
+
+paths:
+  /analyze:
+    post:
+      operationId: analyzePageSpeed
+      summary: Analyze website performance
+      description: Analyze website using Google PageSpeed Insights API.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - url
+              properties:
+                url:
+                  type: string
+                  description: Website URL to analyze
+                strategy:
+                  type: string
+                  description: mobile or desktop
+                  default: mobile
+                  enum:
+                    - mobile
+                    - desktop
+                lead_id:
+                  type: string
+                  description: Lead ID for tracking
+      responses:
+        '200':
+          description: PageSpeed analysis result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageSpeedResult'
+
+  /analyze/both:
+    post:
+      operationId: analyzePageSpeedBoth
+      summary: Analyze for both mobile and desktop
+      description: Analyze website for both mobile and desktop strategies.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - url
+              properties:
+                url:
+                  type: string
+                  description: Website URL to analyze
+                lead_id:
+                  type: string
+                  description: Lead ID for tracking
+      responses:
+        '200':
+          description: PageSpeed analysis results for both strategies
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  mobile:
+                    $ref: '#/components/schemas/PageSpeedResult'
+                  desktop:
+                    $ref: '#/components/schemas/PageSpeedResult'
+                  lead_id:
+                    type: string
+
+components:
+  schemas:
+    PageSpeedResult:
+      type: object
+      properties:
+        performance_score:
+          type: integer
+          description: 0-100 performance score
+        mobile_score:
+          type: integer
+          description: 0-100 mobile-friendliness
+        seo_score:
+          type: integer
+          description: 0-100 SEO score
+        accessibility_score:
+          type: integer
+          description: 0-100 accessibility score
+        largest_contentful_paint:
+          type: number
+          description: LCP in seconds
+        cumulative_layout_shift:
+          type: number
+        first_input_delay:
+          type: number
+          description: FID in milliseconds
+        has_https:
+          type: boolean
+        has_viewport_meta:
+          type: boolean
+        url:
+          type: string
+        strategy:
+          type: string
+        lead_id:
+          type: string
+        error:
+          type: string

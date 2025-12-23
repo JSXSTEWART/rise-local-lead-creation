@@ -1,0 +1,10 @@
+# Rise Local Pipeline Dependencies
+
+# HTTP client
+httpx>=0.25.0
+
+# Environment variables
+python-dotenv>=1.0.0
+
+# For running as CLI
+argparse  # stdlib, but listed for clarity

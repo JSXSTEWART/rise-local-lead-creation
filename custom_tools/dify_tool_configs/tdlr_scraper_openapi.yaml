@@ -1,0 +1,135 @@
+openapi: 3.0.0
+info:
+  title: TDLR License Scraper
+  description: Texas Department of Licensing and Regulation license verification for electrical contractors. Extracts owner_name which is CRITICAL for skip trace.
+  version: 1.0.0
+
+servers:
+  - url: http://tdlr-scraper:8001
+    description: Docker internal
+  - url: http://localhost:8001
+    description: Local development
+
+paths:
+  /search/business:
+    post:
+      operationId: searchByBusiness
+      summary: Search by business name
+      description: Search TDLR for electrical contractor by business name. Returns license details including owner_name.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - business_name
+              properties:
+                business_name:
+                  type: string
+                  description: Business name to search
+                city:
+                  type: string
+                  description: City filter (Texas cities only)
+                lead_id:
+                  type: string
+                  description: Lead ID for tracking
+      responses:
+        '200':
+          description: License search result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicenseResult'
+
+  /search/owner:
+    post:
+      operationId: searchByOwner
+      summary: Search by owner name
+      description: Search TDLR for electrical contractor license by owner name.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - owner_name
+              properties:
+                owner_name:
+                  type: string
+                  description: Owner name to search
+                city:
+                  type: string
+                  description: City filter
+                lead_id:
+                  type: string
+                  description: Lead ID for tracking
+      responses:
+        '200':
+          description: License search result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicenseResult'
+
+  /search/license:
+    post:
+      operationId: searchByLicense
+      summary: Search by license number
+      description: Search TDLR by license number (most accurate method).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - license_number
+              properties:
+                license_number:
+                  type: string
+                  description: TDLR license number
+                lead_id:
+                  type: string
+                  description: Lead ID for tracking
+      responses:
+        '200':
+          description: License search result
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LicenseResult'
+
+components:
+  schemas:
+    LicenseResult:
+      type: object
+      properties:
+        license_status:
+          type: string
+          description: Active, Expired, Suspended, or Not Found
+        license_number:
+          type: string
+        license_type:
+          type: string
+          description: Master Electrician, Journeyman, etc.
+        owner_name:
+          type: string
+          description: CRITICAL - Legal name on license for skip trace
+        business_name:
+          type: string
+        license_expiry:
+          type: string
+        violations:
+          type: integer
+        city:
+          type: string
+        state:
+          type: string
+        verification_date:
+          type: string
+        lead_id:
+          type: string
+        error:
+          type: string

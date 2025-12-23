@@ -1,88 +1,193 @@
-Create GitHub Repository - Instructions
+# Rise Local Lead Creation Pipeline
 
-Push Rise Local Lead Creation to GitHub
+An automated lead generation and qualification pipeline for local service businesses. The system discovers leads, enriches them with intelligence data, scores pain points, and generates personalized outreach.
 
-Option 1: Using GitHub CLI (Recommended)
+## Features
 
-Install GitHub CLI
+- **Lead Discovery**: Automated discovery via Google Places API
+- **Free Pre-Qualification**: Local Docker scrapers filter leads before paid enrichment
+- **AI-Powered Analysis**: Visual analysis, tech stack scoring, and pain point detection
+- **Cost Optimization**: 80% savings by enriching only qualified leads via Clay
+- **Multi-Source Intelligence**:
+  - Screenshot analysis with Gemini Vision
+  - PageSpeed performance metrics
+  - TDLR license verification (Texas)
+  - BBB reputation data
+  - Address verification (residential vs commercial)
+- **Email Generation**: Claude-powered personalized outreach emails
 
-# For Ubuntu/Debian
-curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
-echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-sudo apt update
-sudo apt install gh
+## Architecture
 
-# For other systems, see: https://cli.github.com/manual/installation
+```
+Discovery → FREE Scrapers → Pre-Qualification → Clay Enrichment → Outreach
+              ↑ $0 COST       ↑ FILTER HERE      ↑ QUALIFIED ONLY
+```
 
-Authenticate and Create Repo
+### Services
 
-cd /home/user/rise-local-lead-creation
+| Service | Port | Description |
+|---------|------|-------------|
+| TDLR Scraper | 8001 | Texas license verification |
+| BBB Scraper | 8002 | Better Business Bureau lookup |
+| PageSpeed API | 8003 | Google PageSpeed wrapper |
+| Screenshot Service | 8004 | Visual analysis with Gemini |
+| Owner Extractor | 8005 | Owner name extraction |
+| Address Verifier | 8006 | Residential/commercial check |
 
-# Login to GitHub
-gh auth login
-# Follow prompts:
-# - What account? GitHub.com
-# - Protocol? HTTPS
-# - Authenticate? Login with web browser (or paste token)
+## Quick Start
 
-# Create repository and push
-gh repo create rise-local-lead-creation \
-  --public \
-  --source=. \
-  --description="Intelligent Lead Creation Pipeline with Claude AI + Zapier Orchestration" \
-  --push
+### Prerequisites
 
-# Repository created and pushed!
+- Python 3.10+
+- Docker & Docker Compose
+- API keys (see `.env.example`)
 
-Option 2: Manual Creation (Web Interface)
+### Installation
 
-Step 1: Create Repository on GitHub
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/your-org/rise-local-lead-creation.git
+   cd rise-local-lead-creation
+   ```
 
-Go to https://github.com/new
+2. **Set up environment variables**
+   ```bash
+   cp .env.example .env
+   cp custom_tools/.env.example custom_tools/.env
+   # Edit both files with your API keys
+   ```
 
-Fill in repository details:
+3. **Start Docker services**
+   ```bash
+   cd custom_tools
+   docker compose up -d
+   ```
 
-Repository name: rise-local-lead-creation
-Description: Intelligent Lead Creation Pipeline with Claude AI + Zapier Orchestration - Production-Ready Agent System
-Visibility: Public (or Private if preferred)
-DO NOT check "Initialize with README" (we already have one)
-DO NOT add .gitignore or license yet
-Click "Create repository"
+4. **Install Python dependencies**
+   ```bash
+   pip install -r rise_pipeline/requirements.txt
+   ```
 
-Step 2: Push Local Repository
+5. **Run the pipeline**
+   ```bash
+   # Process discovered leads
+   python run_prequalification_batch.py --all
 
-GitHub will show you instructions. Use these commands:
+   # Run Phase 2 intelligence gathering
+   python run_phase_2_batch.py --all --batch-size 5
+   ```
 
-cd /home/user/rise-local-lead-creation
+## Project Structure
 
-# Add GitHub as remote (replace YOUR_USERNAME)
-git remote add origin https://github.com/YOUR_USERNAME/rise-local-lead-creation.git
+```
+rise-local-lead-creation/
+├── rise_pipeline/           # Core pipeline code
+│   ├── pipeline.py          # Main orchestrator
+│   ├── services.py          # Service integrations
+│   ├── scoring.py           # Pain point scoring
+│   ├── models.py            # Data models
+│   └── config.py            # Configuration
+├── custom_tools/            # Docker services
+│   ├── tdlr_scraper/        # Port 8001
+│   ├── bbb_scraper/         # Port 8002
+│   ├── pagespeed_api/       # Port 8003
+│   ├── screenshot_service/  # Port 8004
+│   ├── owner_extractor/     # Port 8005
+│   ├── address_verifier/    # Port 8006
+│   └── docker-compose.yml
+├── dashboard/               # Web dashboard
+├── docs/                    # Documentation
+│   ├── ARCHITECTURE.md      # System design
+│   ├── TROUBLESHOOTING.md   # Debug guide
+│   ├── DASHBOARD_USAGE.md   # Dashboard guide
+│   └── CLAY_WORKFLOW.md     # Clay integration
+├── .env.example             # Environment template
+└── README.md                # This file
+```
 
-# Push all commits
-git push -u origin master
+## Configuration
 
-# Push tags (if you create any)
-git push --tags
+### Required API Keys
 
-Example with actual username:
+| Service | Purpose | Get from |
+|---------|---------|----------|
+| Supabase | Database | [supabase.com](https://supabase.com) |
+| Google PageSpeed | Performance | [Google Cloud Console](https://console.cloud.google.com) |
+| Google Gemini | AI Vision | [AI Studio](https://makersuite.google.com) |
+| Smarty | Address verification | [smarty.com](https://smarty.com) |
+| Clay | Lead enrichment | [clay.com](https://clay.com) |
+| Anthropic | Email generation | [console.anthropic.com](https://console.anthropic.com) |
 
-git remote add origin https://github.com/johnsmith/rise-local-lead-creation.git
-git push -u origin master
+See `.env.example` for all configuration options.
 
-Option 3: Using SSH (If SSH Keys Configured)
+## Pipeline Stages
 
-Step 1: Create Repo on GitHub (same as Option 2)
+### Stage 1: Lead Discovery
+- Google Places API search by city and industry
+- Raw leads stored in Supabase
 
-Step 2: Push with SSH
+### Stage 2: FREE Pre-Qualification
+- Visual analysis (design quality, mobile responsiveness)
+- Technical performance (PageSpeed scores)
+- License verification (TDLR for Texas)
+- Reputation check (BBB rating, complaints)
+- Address verification (residential vs commercial)
 
-cd /home/user/rise-local-lead-creation
+### Stage 3: Pain Scoring
+- Score calculation based on free data
+- Qualification decision:
+  - Score ≤ 3: **REJECTED**
+  - Score 4-5: **MARGINAL**
+  - Score ≥ 6: **QUALIFIED**
 
-# Add remote with SSH URL
-git remote add origin git@github.com:YOUR_USERNAME/rise-local-lead-creation.git
+### Stage 4: Clay Enrichment (Qualified Only)
+- BuiltWith tech stack analysis
+- Contact waterfall (Dropcontact → Hunter → Apollo)
 
-# Push
-git push -u origin master
+### Stage 5: Outreach
+- AI-generated personalized emails
+- Delivery via Instantly/GHL
 
-Verify Push Success
+## Dashboard
 
-After pushing, verify on GitHub:
+Access the dashboard at `http://localhost:8080` to:
+- View lead counts and qualification status
+- Export CSVs for Clay enrichment
+- Import enriched data back to the pipeline
+- Monitor pipeline progress
+
+## Documentation
+
+- [Architecture](docs/ARCHITECTURE.md) - System design and flow
+- [Troubleshooting](docs/TROUBLESHOOTING.md) - Debug guide
+- [Dashboard Usage](docs/DASHBOARD_USAGE.md) - Dashboard guide
+- [Clay Workflow](docs/CLAY_WORKFLOW.md) - Clay integration steps
+
+## Development
+
+### Running Tests
+
+```bash
+cd rise_pipeline
+python test_pipeline.py
+python test_integrations.py
+```
+
+### Health Checks
+
+```bash
+curl http://localhost:8001/health  # TDLR
+curl http://localhost:8002/health  # BBB
+curl http://localhost:8003/health  # PageSpeed
+curl http://localhost:8004/health  # Screenshot
+curl http://localhost:8005/health  # Owner Extractor
+curl http://localhost:8006/health  # Address Verifier
+```
+
+## License
+
+Proprietary - Rise Local
+
+## Support
+
+For issues or questions, contact the Rise Local team.

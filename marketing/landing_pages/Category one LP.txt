@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rise Local | Digital Infrastructure for Electricians</title>
+    <meta name="description" content="Stop being invisible. Get found by homeowners searching for electricians in your area.">
+
+    <!-- Preconnect for Speed -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts - Optimized Loading -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Oswald:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind Config -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        display: ['Oswald', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'fade-up': 'fadeUp 0.6s ease-out forwards',
+                        'fade-in': 'fadeIn 0.8s ease-out forwards',
+                        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Critical CSS + Animations -->
+    <style>
+        /* Smooth scrolling */
+        html { scroll-behavior: smooth; }
+
+        /* Initial state for scroll animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active { opacity: 1; transform: translateY(0); }
+
+        /* Staggered children */
+        .reveal-stagger > * {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .reveal-stagger.active > *:nth-child(1) { transition-delay: 0.1s; opacity: 1; transform: translateY(0); }
+        .reveal-stagger.active > *:nth-child(2) { transition-delay: 0.2s; opacity: 1; transform: translateY(0); }
+        .reveal-stagger.active > *:nth-child(3) { transition-delay: 0.3s; opacity: 1; transform: translateY(0); }
+        .reveal-stagger.active > *:nth-child(4) { transition-delay: 0.4s; opacity: 1; transform: translateY(0); }
+
+        /* Keyframes */
+        @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes pulseGlow { 0%, 100% { box-shadow: 0 0 40px -10px rgba(249, 115, 22, 0.4); } 50% { box-shadow: 0 0 60px -5px rgba(249, 115, 22, 0.6); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        /* Noise texture overlay */
+        .noise::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+            opacity: 0.03;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* Glass card effect */
+        .glass {
+            background: rgba(30, 41, 59, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(148, 163, 184, 0.1);
+        }
+
+        /* Gradient text */
+        .gradient-text {
+            background: linear-gradient(135deg, #fb923c 0%, #f97316 50%, #ea580c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Button glow */
+        .btn-glow {
+            position: relative;
+            overflow: hidden;
+        }
+        .btn-glow::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: translateX(-100%);
+            transition: transform 0.5s;
+        }
+        .btn-glow:hover::before {
+            transform: translateX(100%);
+        }
+
+        /* Animated underline */
+        .animated-underline {
+            position: relative;
+        }
+        .animated-underline::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, #f97316, #ea580c);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+        }
+        .animated-underline:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 m-0 p-0 antialiased">
+
+    <!-- Main Wrapper -->
+    <div id="app" class="font-sans bg-gradient-to-b from-slate-950 via-slate-900 to-black text-white w-full overflow-x-hidden min-h-screen relative noise">
+
+        <!-- Ambient Background Effects -->
+        <div class="fixed inset-0 pointer-events-none overflow-hidden -z-10">
+            <div class="absolute top-0 left-1/4 w-96 h-96 bg-orange-500/10 rounded-full blur-[150px]"></div>
+            <div class="absolute top-1/3 right-1/4 w-80 h-80 bg-blue-500/5 rounded-full blur-[120px]"></div>
+            <div class="absolute bottom-1/4 left-1/3 w-72 h-72 bg-orange-600/5 rounded-full blur-[100px]"></div>
+        </div>
+
+        <!-- Header -->
+        <header class="w-full bg-slate-950/80 backdrop-blur-xl border-b border-white/5 sticky top-0 z-50">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center">
+                <a href="#" class="flex items-center group">
+                    <img src="INSERT_LOGO_URL_HERE" alt="Rise Local" class="h-9 md:h-11 w-auto filter invert brightness-0 opacity-80 group-hover:opacity-100 transition-opacity duration-300">
+                </a>
+
+                <nav class="flex items-center gap-4 md:gap-6">
+                    <a href="#how-it-works" class="hidden md:inline-block text-slate-400 hover:text-white text-sm font-medium transition-colors animated-underline">How It Works</a>
+                    <a href="#scan-section" class="group relative inline-flex items-center gap-2 border border-slate-700 hover:border-orange-500/50 bg-slate-900/50 text-slate-300 hover:text-white px-4 md:px-5 py-2.5 rounded-lg text-sm font-semibold transition-all duration-300">
+                        <span class="relative z-10 font-display uppercase tracking-wider text-xs md:text-sm">Free Scan</span>
+                        <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </a>
+                </nav>
+            </div>
+        </header>
+
+        <!-- Hero Section -->
+        <section class="relative pt-16 pb-32 md:pt-24 md:pb-44 lg:pt-32 lg:pb-52 px-4 sm:px-6">
+            <div class="max-w-5xl mx-auto text-center">
+
+                <!-- Audience Tag -->
+                <div class="inline-flex items-center gap-2 bg-orange-500/10 border border-orange-500/20 text-orange-400 px-4 py-2 rounded-full text-xs font-bold tracking-widest uppercase mb-8 animate-[fadeUp_0.6s_ease-out]">
+                    <span class="w-2 h-2 bg-orange-500 rounded-full animate-pulse"></span>
+                    For Licensed Electricians Only
+                </div>
+
+                <!-- Headline -->
+                <h1 class="font-display text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-bold text-white uppercase leading-[1.1] mb-6 md:mb-8 tracking-tight animate-[fadeUp_0.6s_ease-out_0.1s_both]">
+                    Your Best Work <br class="hidden sm:block"/>
+                    <span class="gradient-text">Deserves To Be Seen.</span>
+                </h1>
+
+                <!-- Subheadline -->
+                <p class="font-sans text-base sm:text-lg md:text-xl text-slate-400 max-w-2xl mx-auto mb-10 md:mb-12 leading-relaxed animate-[fadeUp_0.6s_ease-out_0.2s_both]">
+                    Right now, homeowners in <span class="dynamic-city text-white font-semibold">Your Area</span> are searching for trustworthy electricians. They're finding your competitors—not <span class="dynamic-company text-white font-semibold">Your Business</span>.
+                </p>
+
+                <!-- CTA Group -->
+                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center animate-[fadeUp_0.6s_ease-out_0.3s_both]">
+                    <a href="#scan-section" class="btn-glow group relative bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-500 hover:to-orange-400 text-white font-display font-bold py-4 px-8 md:py-5 md:px-10 rounded-xl shadow-lg shadow-orange-500/25 uppercase tracking-wider transform hover:-translate-y-0.5 hover:shadow-orange-500/40 transition-all duration-300 w-full sm:w-auto text-center text-sm md:text-base">
+                        Check My Visibility Score
+                        <span class="ml-2 inline-block transform group-hover:translate-x-1 transition-transform">→</span>
+                    </a>
+                </div>
+
+                <p class="text-slate-500 text-xs md:text-sm mt-4 animate-[fadeUp_0.6s_ease-out_0.4s_both]">✓ Free • ✓ No Credit Card • ✓ Results in 60 Seconds</p>
+            </div>
+
+            <!-- Scroll indicator -->
+            <div class="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce hidden md:block">
+                <svg class="w-6 h-6 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/></svg>
+            </div>
+        </section>
+
+        <!-- Scanner Section -->
+        <section id="scan-section" class="relative px-4 sm:px-6 z-20">
+            <div class="max-w-4xl mx-auto -mt-16 md:-mt-20">
+                <div class="reveal bg-white rounded-2xl md:rounded-3xl shadow-2xl shadow-black/50 overflow-hidden border border-slate-200 ring-1 ring-black/5">
+
+                    <!-- Scanner Header -->
+                    <div class="bg-gradient-to-r from-slate-100 to-slate-50 px-5 py-4 md:px-8 md:py-5 border-b border-slate-200 flex justify-between items-center">
+                        <div class="flex items-center gap-3">
+                            <div class="flex gap-1.5">
+                                <div class="w-3 h-3 rounded-full bg-red-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-amber-400"></div>
+                                <div class="w-3 h-3 rounded-full bg-green-400"></div>
+                            </div>
+                            <h3 class="text-slate-800 font-display text-lg md:text-xl font-bold uppercase tracking-wide">Directory Scanner</h3>
+                        </div>
+                        <span class="text-xs text-slate-500 font-medium uppercase tracking-wider hidden sm:block">Live Analysis</span>
+                    </div>
+
+                    <!-- Scanner Body -->
+                    <div class="p-6 md:p-10 lg:p-12 bg-white flex flex-col items-center justify-center min-h-[280px] md:min-h-[350px] text-center">
+
+                        <!-- Loading State Visual -->
+                        <div class="relative mb-6">
+                            <div class="w-16 h-16 md:w-20 md:h-20 border-4 border-slate-100 border-t-orange-500 rounded-full animate-spin"></div>
+                            <div class="absolute inset-0 flex items-center justify-center">
+                                <svg class="w-6 h-6 md:w-8 md:h-8 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+                            </div>
+                        </div>
+
+                        <p class="text-slate-600 font-semibold mb-2 text-sm md:text-base">Scanning 50+ Directories...</p>
+                        <p class="text-slate-400 text-xs md:text-sm mb-6">Google, Yelp, Angi, HomeAdvisor, BBB, and more</p>
+
+                        <!-- Yext Embed Placeholder -->
+                        <div class="w-full max-w-lg bg-slate-50 p-4 md:p-6 border-2 border-dashed border-slate-200 rounded-xl text-slate-400 text-xs font-mono">
+                            [PASTE YEXT EMBED CODE HERE]
+                        </div>
+                    </div>
+
+                    <!-- Scanner Footer -->
+                    <div class="bg-gradient-to-r from-slate-800 to-slate-900 px-5 py-4 md:px-8 md:py-5 text-center">
+                        <p class="text-slate-300 text-xs md:text-sm">
+                            Finding listings for <span class="dynamic-company font-bold text-white">Your Business</span> in <span class="dynamic-city font-bold text-white">Your Area</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Trust Bar -->
+        <section class="py-12 md:py-16 px-4 sm:px-6 mt-16 md:mt-20">
+            <div class="max-w-5xl mx-auto">
+                <div class="reveal flex flex-col md:flex-row items-center justify-center gap-6 md:gap-12 text-slate-500 text-xs md:text-sm">
+                    <span class="uppercase tracking-widest font-medium">Trusted by electricians across Texas</span>
+                    <div class="flex items-center gap-6 md:gap-10">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <span class="text-slate-400">4.9/5 Rating</span>
+                        </div>
+                        <div class="h-4 w-px bg-slate-700"></div>
+                        <span class="text-slate-400">100+ Partners</span>
+                        <div class="h-4 w-px bg-slate-700 hidden sm:block"></div>
+                        <span class="text-slate-400 hidden sm:block">$2M+ Revenue Generated</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- The Problem: Rule of 10 -->
+        <section class="py-20 md:py-28 px-4 sm:px-6">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+
+                    <!-- Text Content -->
+                    <div class="reveal">
+                        <span class="text-orange-500 font-display uppercase tracking-widest text-xs md:text-sm font-bold mb-4 block">The Hard Truth</span>
+                        <h2 class="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white uppercase mb-6 leading-tight">
+                            The Google<br/><span class="gradient-text">Rule of 10</span>
+                        </h2>
+                        <p class="text-slate-300 text-base md:text-lg mb-6 leading-relaxed">
+                            The Yellow Pages era is dead. In <span class="dynamic-city font-semibold text-white">Your Area</span>, there are only <strong class="text-orange-400">10 organic spots</strong> on Google's first page.
+                        </p>
+                        <blockquote class="text-slate-400 mb-8 border-l-4 border-orange-500 pl-5 py-2 italic bg-slate-800/30 rounded-r-lg">
+                            "If you aren't in the Top 10, you don't exist. The top 3 spots get 75% of all clicks. Everyone else fights for scraps."
+                        </blockquote>
+
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3 text-slate-300">
+                                <svg class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                <span><strong class="text-white">97%</strong> of homeowners search Google before hiring</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-slate-300">
+                                <svg class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                <span>Your competitors are <strong class="text-white">stealing your leads</strong> daily</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-slate-300">
+                                <svg class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                                <span>Word of mouth alone <strong class="text-white">isn't enough</strong> anymore</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Visual: Google Results Mockup -->
+                    <div class="reveal">
+                        <div class="glass rounded-2xl p-5 md:p-8 shadow-2xl">
+                            <div class="flex items-center gap-3 mb-6 pb-4 border-b border-slate-700/50">
+                                <div class="flex gap-1.5">
+                                    <div class="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
+                                    <div class="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
+                                    <div class="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
+                                </div>
+                                <div class="flex-1 bg-slate-800 rounded-lg px-4 py-2 text-slate-400 text-xs md:text-sm">
+                                    google.com/search?q=electrician+<span class="dynamic-city">your+area</span>
+                                </div>
+                            </div>
+
+                            <div class="space-y-3">
+                                <!-- Top 3 Spots -->
+                                <div class="flex items-center justify-between p-3 md:p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl group hover:bg-emerald-500/15 transition-colors">
+                                    <div class="flex items-center gap-3">
+                                        <span class="w-6 h-6 md:w-8 md:h-8 bg-emerald-500 rounded-lg flex items-center justify-center text-white font-bold text-xs md:text-sm">1</span>
+                                        <span class="text-emerald-400 font-bold font-display uppercase text-sm md:text-base">Premium Spot</span>
+                                    </div>
+                                    <span class="text-emerald-300 text-xs md:text-sm font-medium">Competitor A</span>
+                                </div>
+                                <div class="flex items-center justify-between p-3 md:p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
+                                    <div class="flex items-center gap-3">
+                                        <span class="w-6 h-6 md:w-8 md:h-8 bg-emerald-500/80 rounded-lg flex items-center justify-center text-white font-bold text-xs md:text-sm">2</span>
+                                        <span class="text-emerald-400 font-bold font-display uppercase text-sm md:text-base">Premium Spot</span>
+                                    </div>
+                                    <span class="text-emerald-300 text-xs md:text-sm font-medium">Competitor B</span>
+                                </div>
+                                <div class="flex items-center justify-between p-3 md:p-4 bg-emerald-500/10 border border-emerald-500/30 rounded-xl">
+                                    <div class="flex items-center gap-3">
+                                        <span class="w-6 h-6 md:w-8 md:h-8 bg-emerald-500/60 rounded-lg flex items-center justify-center text-white font-bold text-xs md:text-sm">3</span>
+                                        <span class="text-emerald-400 font-bold font-display uppercase text-sm md:text-base">Premium Spot</span>
+                                    </div>
+                                    <span class="text-emerald-300 text-xs md:text-sm font-medium">Competitor C</span>
+                                </div>
+
+                                <!-- Separator -->
+                                <div class="flex items-center gap-3 py-2">
+                                    <div class="flex-1 h-px bg-slate-700/50"></div>
+                                    <span class="text-slate-500 text-xs uppercase tracking-wider">75% of clicks above</span>
+                                    <div class="flex-1 h-px bg-slate-700/50"></div>
+                                </div>
+
+                                <!-- Invisible Zone -->
+                                <div class="p-4 md:p-6 bg-slate-900/50 border border-red-500/20 rounded-xl text-center opacity-60">
+                                    <p class="text-slate-600 text-xs mb-1">Page 2, 3, 4...</p>
+                                    <p class="text-red-400 font-bold font-display text-base md:text-xl uppercase tracking-widest">The Invisible Zone</p>
+                                    <p class="text-xs text-slate-500 mt-1">(Where 90% of electricians sit)</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- How It Works -->
+        <section id="how-it-works" class="py-20 md:py-28 bg-gradient-to-b from-transparent via-slate-900/50 to-transparent">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6">
+
+                <div class="text-center mb-14 md:mb-20 reveal">
+                    <span class="text-orange-500 font-display uppercase tracking-widest text-xs md:text-sm font-bold mb-4 block">The Solution</span>
+                    <h2 class="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white uppercase mb-4">
+                        The Rise Local <span class="gradient-text">Engine</span>
+                    </h2>
+                    <p class="text-slate-400 max-w-2xl mx-auto text-base md:text-lg">We don't build websites. We build the <strong class="text-white">digital infrastructure</strong> that forces your way into the Top 10.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 reveal-stagger">
+
+                    <!-- Card 1 -->
+                    <div class="group glass rounded-2xl p-6 md:p-8 hover:bg-slate-800/60 hover:border-orange-500/30 transition-all duration-500 relative overflow-hidden">
+                        <div class="absolute -top-4 -right-4 w-24 h-24 bg-orange-500/5 rounded-full blur-2xl group-hover:bg-orange-500/10 transition-colors"></div>
+                        <div class="relative">
+                            <div class="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-orange-500/20 group-hover:scale-110 transition-transform duration-300">
+                                <svg class="w-6 h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/></svg>
+                            </div>
+                            <span class="text-orange-500 font-display text-xs font-bold uppercase tracking-widest mb-2 block">01</span>
+                            <h3 class="font-display text-xl md:text-2xl text-white uppercase mb-2">The Asset</h3>
+                            <p class="text-sm text-slate-400 leading-relaxed">A conversion-optimized website that passes Google's Core Web Vitals and turns visitors into booked jobs.</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="group glass rounded-2xl p-6 md:p-8 hover:bg-slate-800/60 hover:border-orange-500/30 transition-all duration-500 relative overflow-hidden">
+                        <div class="absolute -top-4 -right-4 w-24 h-24 bg-orange-500/5 rounded-full blur-2xl group-hover:bg-orange-500/10 transition-colors"></div>
+                        <div class="relative">
+                            <div class="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-orange-500/20 group-hover:scale-110 transition-transform duration-300">
+                                <svg class="w-6 h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                            </div>
+                            <span class="text-orange-500 font-display text-xs font-bold uppercase tracking-widest mb-2 block">02</span>
+                            <h3 class="font-display text-xl md:text-2xl text-white uppercase mb-2">The Traffic</h3>
+                            <p class="text-sm text-slate-400 leading-relaxed">Google's "Guaranteed" badge + map pack domination. Be the first call homeowners make.</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="group glass rounded-2xl p-6 md:p-8 hover:bg-slate-800/60 hover:border-orange-500/30 transition-all duration-500 relative overflow-hidden">
+                        <div class="absolute -top-4 -right-4 w-24 h-24 bg-orange-500/5 rounded-full blur-2xl group-hover:bg-orange-500/10 transition-colors"></div>
+                        <div class="relative">
+                            <div class="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-orange-500/20 group-hover:scale-110 transition-transform duration-300">
+                                <svg class="w-6 h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                            </div>
+                            <span class="text-orange-500 font-display text-xs font-bold uppercase tracking-widest mb-2 block">03</span>
+                            <h3 class="font-display text-xl md:text-2xl text-white uppercase mb-2">The Ops</h3>
+                            <p class="text-sm text-slate-400 leading-relaxed">Automated follow-ups, review requests, and booking systems. Never lose a lead again.</p>
+                        </div>
+                    </div>
+
+                    <!-- Card 4 -->
+                    <div class="group glass rounded-2xl p-6 md:p-8 hover:bg-slate-800/60 hover:border-orange-500/30 transition-all duration-500 relative overflow-hidden">
+                        <div class="absolute -top-4 -right-4 w-24 h-24 bg-orange-500/5 rounded-full blur-2xl group-hover:bg-orange-500/10 transition-colors"></div>
+                        <div class="relative">
+                            <div class="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center mb-5 shadow-lg shadow-orange-500/20 group-hover:scale-110 transition-transform duration-300">
+                                <svg class="w-6 h-6 md:w-7 md:h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/></svg>
+                            </div>
+                            <span class="text-orange-500 font-display text-xs font-bold uppercase tracking-widest mb-2 block">04</span>
+                            <h3 class="font-display text-xl md:text-2xl text-white uppercase mb-2">The Scale</h3>
+                            <p class="text-sm text-slate-400 leading-relaxed">Targeted ad campaigns to keep your schedule full year-round—not just in summer.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Proof -->
+        <section class="py-20 md:py-28 px-4 sm:px-6">
+            <div class="max-w-6xl mx-auto">
+
+                <div class="text-center mb-14 md:mb-16 reveal">
+                    <span class="text-orange-500 font-display uppercase tracking-widest text-xs md:text-sm font-bold mb-4 block">Results</span>
+                    <h2 class="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white uppercase">
+                        Electricians Who <span class="gradient-text">Got Found</span>
+                    </h2>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 reveal-stagger">
+
+                    <!-- Testimonial 1 -->
+                    <div class="glass rounded-2xl p-6 md:p-8 relative">
+                        <div class="absolute top-6 right-6 text-orange-500/20">
+                            <svg class="w-12 h-12 md:w-16 md:h-16" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                        </div>
+                        <div class="flex items-center gap-1 mb-4">
+                            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        </div>
+                        <p class="text-slate-300 text-base md:text-lg leading-relaxed mb-6 italic">
+                            "I went from maybe 2-3 calls a week to my phone ringing every day. I had to <strong class="text-white">hire another guy within 3 months</strong>."
+                        </p>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-lg">M</div>
+                            <div>
+                                <p class="text-white font-semibold">Mike T.</p>
+                                <p class="text-slate-500 text-sm">Austin Electrician</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 2 -->
+                    <div class="glass rounded-2xl p-6 md:p-8 relative">
+                        <div class="absolute top-6 right-6 text-orange-500/20">
+                            <svg class="w-12 h-12 md:w-16 md:h-16" fill="currentColor" viewBox="0 0 24 24"><path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/></svg>
+                        </div>
+                        <div class="flex items-center gap-1 mb-4">
+                            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                            <svg class="w-5 h-5 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
+                        </div>
+                        <p class="text-slate-300 text-base md:text-lg leading-relaxed mb-6 italic">
+                            "I didn't even know what SEO was. Now I'm the <strong class="text-white">first result</strong> when you search 'electrician Dallas.' My schedule is booked 2 weeks out."
+                        </p>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-gradient-to-br from-orange-500 to-orange-600 rounded-full flex items-center justify-center text-white font-bold text-lg">C</div>
+                            <div>
+                                <p class="text-white font-semibold">Carlos R.</p>
+                                <p class="text-slate-500 text-sm">Dallas Electrician</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ROI Section -->
+        <section class="py-16 md:py-20 px-4 sm:px-6 border-y border-slate-800/50 bg-gradient-to-r from-slate-900 via-slate-800/50 to-slate-900">
+            <div class="max-w-4xl mx-auto text-center reveal">
+                <div class="inline-flex items-center gap-2 bg-green-500/10 border border-green-500/20 text-green-400 px-4 py-2 rounded-full text-xs font-bold tracking-widest uppercase mb-6">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    ROI Guarantee
+                </div>
+                <h2 class="font-display text-3xl sm:text-4xl md:text-5xl font-bold text-white uppercase mb-6">One Job Covers The Cost.</h2>
+                <p class="text-slate-300 text-base md:text-xl leading-relaxed max-w-2xl mx-auto">
+                    A single panel upgrade or rewire job covers your entire setup. You're not <em>spending</em> on marketing—you're investing in a machine that generates jobs on autopilot.
+                </p>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <footer class="py-20 md:py-28 px-4 sm:px-6 text-center relative">
+
+            <!-- Glow Effect -->
+            <div class="absolute bottom-0 left-1/2 -translate-x-1/2 w-full max-w-2xl h-64 bg-orange-500/10 blur-[100px] rounded-full pointer-events-none"></div>
+
+            <div class="max-w-3xl mx-auto relative reveal">
+                <h2 class="font-display text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white uppercase mb-6">Secure Your Spot.</h2>
+                <p class="text-slate-400 text-base md:text-lg mb-8 md:mb-10 max-w-xl mx-auto">
+                    We only onboard <strong class="text-white">5 new partners per month</strong> in <span class="dynamic-city text-white font-semibold">Your Area</span> to maintain quality.
+                </p>
+
+                <a href="#scan-section" class="btn-glow inline-flex items-center justify-center gap-3 bg-gradient-to-r from-orange-600 to-orange-500 hover:from-orange-500 hover:to-orange-400 text-white font-display font-bold py-5 px-10 md:py-6 md:px-14 rounded-xl shadow-lg shadow-orange-500/30 uppercase tracking-wider transform hover:-translate-y-1 hover:shadow-orange-500/50 transition-all duration-300 text-base md:text-lg animate-[pulseGlow_2s_ease-in-out_infinite]">
+                    Book A Strategy Call
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </a>
+
+                <p class="text-slate-600 text-xs md:text-sm mt-6">No obligation. 15 minutes. See if we're a fit.</p>
+            </div>
+
+            <!-- Footer Bottom -->
+            <div class="max-w-5xl mx-auto mt-16 md:mt-20 pt-8 border-t border-slate-800/50">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4 text-slate-600 text-xs md:text-sm">
+                    <span>&copy; 2025 Rise Local. All rights reserved.</span>
+                    <div class="flex items-center gap-6">
+                        <a href="#" class="hover:text-slate-400 transition-colors">Privacy</a>
+                        <a href="#" class="hover:text-slate-400 transition-colors">Terms</a>
+                        <img src="INSERT_LOGO_URL_HERE" alt="Rise Local" class="h-5 md:h-6 filter invert brightness-0 opacity-40">
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- Lightweight Scripts -->
+    <script>
+        // DOM Ready
+        document.addEventListener("DOMContentLoaded", function() {
+
+            // 1. URL Parameter Personalization
+            const params = new URLSearchParams(window.location.search);
+            const city = params.get('city') || 'Your Area';
+            const company = params.get('company') || 'Your Business';
+
+            // Update all dynamic elements with smooth transition
+            const updateDynamic = (selector, value) => {
+                document.querySelectorAll(selector).forEach(el => {
+                    el.style.transition = 'opacity 0.4s ease';
+                    el.style.opacity = '0';
+                    setTimeout(() => {
+                        el.textContent = value;
+                        el.style.opacity = '1';
+                    }, 200);
+                });
+            };
+
+            updateDynamic('.dynamic-city', city);
+            updateDynamic('.dynamic-company', company);
+
+            // 2. Scroll Reveal Animation (IntersectionObserver - performant)
+            const revealElements = document.querySelectorAll('.reveal, .reveal-stagger');
+
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('active');
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+
+            revealElements.forEach(el => revealObserver.observe(el));
+
+            // 3. Smooth scroll for anchor links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
