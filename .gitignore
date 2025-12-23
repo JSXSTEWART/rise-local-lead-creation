@@ -140,3 +140,4 @@ marketing/landing_pages/screenshots/
 # -----------------------------------------------------------------------------
 *old*do*not*use*
 scripts/add_github_secrets.py
+*.pid
