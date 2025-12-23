@@ -1,0 +1,591 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RISE LOCAL | Lead Discovery Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Source+Sans+Pro:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <!-- Leaflet CSS for maps (local) -->
+    <link rel="stylesheet" href="leaflet.css" />
+</head>
+<body>
+    <!-- Cyberpunk Side Visuals -->
+    <div class="cyber-side-left"></div>
+    <div class="cyber-side-right"></div>
+
+    <!-- Floating Particles -->
+    <div class="cyber-particles">
+        <span></span><span></span><span></span><span></span><span></span>
+        <span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <img src="RLnew_black_logo.png" alt="Rise Local" height="50" style="filter: invert(1) drop-shadow(0 0 10px rgba(0, 245, 255, 0.8));">
+            </div>
+            <div class="header-title">
+                <h1>Rise Local // Lead Discovery</h1>
+                <span class="badge">System Online</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+        <!-- Stats Overview -->
+        <section class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                        <circle cx="9" cy="7" r="4"/>
+                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-value" id="total-leads">--</span>
+                    <span class="stat-label">Total Leads</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+                        <polyline points="17 6 23 6 23 12"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-value" id="leads-today">--</span>
+                    <span class="stat-label">Created Today</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-value" id="jobs-running">0</span>
+                    <span class="stat-label">Jobs Running</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon purple">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                </div>
+                <div class="stat-content">
+                    <span class="stat-value" id="total-cost">$--</span>
+                    <span class="stat-label">Est. API Cost</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Two Column Layout -->
+        <div class="two-column">
+            <!-- Left Column: Discovery Control -->
+            <section class="panel discovery-panel">
+                <div class="panel-header">
+                    <h2>Run Discovery</h2>
+                    <button id="expand-discovery-map" class="btn btn-secondary btn-sm" title="Expand Map">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="15 3 21 3 21 9"/>
+                            <polyline points="9 21 3 21 3 15"/>
+                            <line x1="21" y1="3" x2="14" y2="10"/>
+                            <line x1="3" y1="21" x2="10" y2="14"/>
+                        </svg>
+                    </button>
+                </div>
+                <div class="panel-body">
+                    <!-- Input Mode Toggle -->
+                    <div class="input-mode-toggle">
+                        <button id="mode-form" class="mode-btn active" title="Use form inputs">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+                                <line x1="3" y1="9" x2="21" y2="9"/>
+                                <line x1="9" y1="21" x2="9" y2="9"/>
+                            </svg>
+                            Form
+                        </button>
+                        <button id="mode-map" class="mode-btn" title="Click map to set location">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                                <circle cx="12" cy="10" r="3"/>
+                            </svg>
+                            Map Pin
+                        </button>
+                    </div>
+
+                    <!-- Form Input Mode -->
+                    <div id="form-input-mode">
+                        <div class="form-group">
+                            <label for="metro-select">Metro Area</label>
+                            <select id="metro-select" class="select">
+                                <option value="">Select metro area...</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="zip-code">Specific Zip Code (optional)</label>
+                            <input type="text" id="zip-code" class="input" placeholder="e.g., 78701">
+                        </div>
+                    </div>
+
+                    <!-- Map Input Mode -->
+                    <div id="map-input-mode" class="hidden">
+                        <p class="help-text">Click on the map to place a pin, then adjust the radius.</p>
+                        <div id="discovery-map-container">
+                            <div id="discovery-map"></div>
+                            <div class="map-controls">
+                                <button id="toggle-satellite" class="map-control-btn" title="Toggle Satellite View">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <circle cx="12" cy="12" r="10"/>
+                                        <line x1="2" y1="12" x2="22" y2="12"/>
+                                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="pin-info" class="pin-info hidden">
+                            <span id="pin-location">No location selected</span>
+                        </div>
+                    </div>
+
+                    <!-- Radius Slider (shared between modes) -->
+                    <div class="form-group">
+                        <label for="radius">Search Radius: <span id="radius-display">15</span> miles</label>
+                        <input type="range" id="radius" class="radius-slider" value="15" min="5" max="50" step="1">
+                    </div>
+
+                    <button id="run-discovery" class="btn btn-primary">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        Start Discovery
+                    </button>
+
+                    <!-- Discovery Status -->
+                    <div id="discovery-status" class="status-box hidden">
+                        <div class="status-header">
+                            <span class="status-indicator"></span>
+                            <span id="status-text">Running...</span>
+                        </div>
+                        <div id="status-details" class="status-details"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Column: Filter Config -->
+            <section class="panel">
+                <div class="panel-header">
+                    <h2>Filter Configuration</h2>
+                    <button id="save-filters" class="btn btn-secondary btn-sm">Save Changes</button>
+                </div>
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label>Franchise Blocklist</label>
+                        <p class="help-text">Business names containing these terms will be automatically rejected.</p>
+                        <div id="franchise-list" class="tag-list">
+                            <!-- Tags populated by JS -->
+                        </div>
+                        <div class="tag-input-wrapper">
+                            <input type="text" id="new-franchise" class="input" placeholder="Add franchise name...">
+                            <button id="add-franchise" class="btn btn-secondary btn-sm">Add</button>
+                        </div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="enable-rating-filter">
+                            <span>Enable Rating Filter (optional)</span>
+                        </label>
+                        <div id="rating-filter-options" class="filter-options hidden">
+                            <div class="range-inputs">
+                                <div>
+                                    <label>Min Rating</label>
+                                    <input type="number" id="min-rating" class="input input-sm" value="0" min="0" max="5" step="0.1">
+                                </div>
+                                <div>
+                                    <label>Max Rating</label>
+                                    <input type="number" id="max-rating" class="input input-sm" value="5" min="0" max="5" step="0.1">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="enable-review-filter">
+                            <span>Enable Review Count Filter (optional)</span>
+                        </label>
+                        <div id="review-filter-options" class="filter-options hidden">
+                            <div class="range-inputs">
+                                <div>
+                                    <label>Min Reviews</label>
+                                    <input type="number" id="min-reviews" class="input input-sm" value="0" min="0">
+                                </div>
+                                <div>
+                                    <label>Max Reviews</label>
+                                    <input type="number" id="max-reviews" class="input input-sm" value="9999" min="0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- Coverage Map -->
+        <section class="panel full-width">
+            <div class="panel-header">
+                <h2>Lead Coverage Map</h2>
+                <div class="map-legend">
+                    <span class="legend-item"><span class="legend-dot blue"></span> Search Area</span>
+                    <span class="legend-item"><span class="legend-dot green"></span> Lead Location</span>
+                </div>
+            </div>
+            <div class="panel-body map-panel">
+                <div id="coverage-map"></div>
+            </div>
+        </section>
+
+        <!-- Recent Discoveries Table -->
+        <section class="panel full-width">
+            <div class="panel-header">
+                <h2>Recent Discovery Jobs</h2>
+                <button id="refresh-jobs" class="btn btn-secondary btn-sm">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="23 4 23 10 17 10"/>
+                        <polyline points="1 20 1 14 7 14"/>
+                        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                    </svg>
+                    Refresh
+                </button>
+            </div>
+            <div class="panel-body">
+                <div class="table-wrapper">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Metro</th>
+                                <th>Status</th>
+                                <th>Places Found</th>
+                                <th>Leads Created</th>
+                                <th>Filtered</th>
+                                <th>Duplicates</th>
+                                <th>API Cost</th>
+                            </tr>
+                        </thead>
+                        <tbody id="jobs-table">
+                            <tr>
+                                <td colspan="8" class="empty-state">Loading...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- Leads by Metro -->
+        <section class="panel full-width">
+            <div class="panel-header">
+                <h2>Leads by Metro Area</h2>
+            </div>
+            <div class="panel-body">
+                <div id="metro-stats" class="metro-grid">
+                    <!-- Populated by JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Clay Enrichment Queues -->
+        <section class="panel full-width clay-section">
+            <div class="panel-header">
+                <h2>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5"/>
+                        <path d="M2 12l10 5 10-5"/>
+                    </svg>
+                    Clay Enrichment Queues
+                </h2>
+                <span class="badge clay-badge">Human-in-the-Loop</span>
+            </div>
+            <div class="panel-body">
+                <div class="enrichment-grid">
+                    <!-- BuiltWith Tech Enrichment Queue -->
+                    <div class="enrichment-card">
+                        <div class="enrichment-header">
+                            <div class="enrichment-icon builtwith">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                                    <line x1="8" y1="21" x2="16" y2="21"/>
+                                    <line x1="12" y1="17" x2="12" y2="21"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3>BuiltWith Tech Stack</h3>
+                                <p class="enrichment-subtitle">Phase 1 - Technology Detection</p>
+                            </div>
+                        </div>
+                        <div class="enrichment-stats">
+                            <div class="enrichment-stat">
+                                <span class="stat-number" id="builtwith-queue-count">--</span>
+                                <span class="stat-text">Leads Pending</span>
+                            </div>
+                            <div class="enrichment-stat">
+                                <span class="stat-number" id="builtwith-completed-count">--</span>
+                                <span class="stat-text">Completed</span>
+                            </div>
+                        </div>
+                        <div class="enrichment-actions">
+                            <button id="refresh-builtwith-queue" class="btn btn-secondary btn-sm">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="23 4 23 10 17 10"/>
+                                    <polyline points="1 20 1 14 7 14"/>
+                                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                                </svg>
+                                Refresh
+                            </button>
+                            <button id="export-builtwith-csv" class="btn btn-primary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                Export CSV for Clay
+                            </button>
+                        </div>
+                        <div class="enrichment-actions" style="margin-top: 8px;">
+                            <input type="file" id="import-builtwith-file" accept=".csv" style="display: none;">
+                            <button id="import-builtwith-csv" class="btn btn-success">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="17 8 12 3 7 8"/>
+                                    <line x1="12" y1="3" x2="12" y2="15"/>
+                                </svg>
+                                Import Enriched CSV
+                            </button>
+                        </div>
+                        <div id="builtwith-status" class="enrichment-status hidden">
+                            <span class="status-icon"></span>
+                            <span id="builtwith-status-text"></span>
+                        </div>
+                    </div>
+
+                    <!-- Contact Waterfall Enrichment Queue -->
+                    <div class="enrichment-card">
+                        <div class="enrichment-header">
+                            <div class="enrichment-icon waterfall">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3>Contact Waterfall</h3>
+                                <p class="enrichment-subtitle">Phase 4 - Owner/Email Discovery</p>
+                            </div>
+                        </div>
+                        <div class="enrichment-stats">
+                            <div class="enrichment-stat">
+                                <span class="stat-number" id="waterfall-queue-count">--</span>
+                                <span class="stat-text">Leads Pending</span>
+                            </div>
+                            <div class="enrichment-stat">
+                                <span class="stat-number" id="waterfall-completed-count">--</span>
+                                <span class="stat-text">Completed</span>
+                            </div>
+                        </div>
+                        <div class="enrichment-actions">
+                            <button id="refresh-waterfall-queue" class="btn btn-secondary btn-sm">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="23 4 23 10 17 10"/>
+                                    <polyline points="1 20 1 14 7 14"/>
+                                    <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                                </svg>
+                                Refresh
+                            </button>
+                            <button id="export-waterfall-csv" class="btn btn-primary">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="7 10 12 15 17 10"/>
+                                    <line x1="12" y1="15" x2="12" y2="3"/>
+                                </svg>
+                                Export CSV for Clay
+                            </button>
+                        </div>
+                        <div class="enrichment-actions" style="margin-top: 8px;">
+                            <input type="file" id="import-waterfall-file" accept=".csv" style="display: none;">
+                            <button id="import-waterfall-csv" class="btn btn-success">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                    <polyline points="17 8 12 3 7 8"/>
+                                    <line x1="12" y1="3" x2="12" y2="15"/>
+                                </svg>
+                                Import Enriched CSV
+                            </button>
+                        </div>
+                        <div id="waterfall-status" class="enrichment-status hidden">
+                            <span class="status-icon"></span>
+                            <span id="waterfall-status-text"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Enrichment Exports Table -->
+                <div class="enrichment-exports-section">
+                    <h4>Recent CSV Exports</h4>
+                    <div class="table-wrapper">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Leads</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="exports-table">
+                                <tr>
+                                    <td colspan="5" class="empty-state">No exports yet</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Email Notification Settings -->
+        <section class="panel full-width">
+            <div class="panel-header">
+                <h2>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                        <polyline points="22,6 12,13 2,6"/>
+                    </svg>
+                    Notification Settings
+                </h2>
+            </div>
+            <div class="panel-body">
+                <div class="notification-settings">
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="enable-email-notifications">
+                            <span>Email me when CSV exports are ready</span>
+                        </label>
+                    </div>
+                    <div id="email-settings" class="email-settings hidden">
+                        <div class="form-group">
+                            <label for="notification-email">Notification Email</label>
+                            <input type="email" id="notification-email" class="input" placeholder="your@email.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Notify when queue reaches:</label>
+                            <div class="threshold-inputs">
+                                <div>
+                                    <label for="builtwith-threshold">BuiltWith Queue</label>
+                                    <input type="number" id="builtwith-threshold" class="input input-sm" value="25" min="1">
+                                    <span class="input-suffix">leads</span>
+                                </div>
+                                <div>
+                                    <label for="waterfall-threshold">Waterfall Queue</label>
+                                    <input type="number" id="waterfall-threshold" class="input input-sm" value="25" min="1">
+                                    <span class="input-suffix">leads</span>
+                                </div>
+                            </div>
+                        </div>
+                        <button id="save-notification-settings" class="btn btn-secondary">Save Settings</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Expanded Map Modal -->
+    <div id="map-modal" class="modal hidden">
+        <div class="modal-content modal-fullscreen">
+            <div class="modal-header">
+                <h3>Select Discovery Area</h3>
+                <div class="modal-header-actions">
+                    <button id="modal-toggle-satellite" class="btn btn-secondary btn-sm">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="2" y1="12" x2="22" y2="12"/>
+                            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                        </svg>
+                        Satellite
+                    </button>
+                    <button id="close-map-modal" class="btn btn-secondary btn-sm">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="18" y1="6" x2="6" y2="18"/>
+                            <line x1="6" y1="6" x2="18" y2="18"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="modal-body modal-map-body">
+                <div id="expanded-discovery-map"></div>
+            </div>
+            <div class="modal-footer">
+                <div class="modal-footer-left">
+                    <span id="modal-pin-info">Click on the map to place a pin</span>
+                </div>
+                <div class="modal-footer-right">
+                    <label for="modal-radius">Radius: <span id="modal-radius-display">15</span> mi</label>
+                    <input type="range" id="modal-radius" class="radius-slider" value="15" min="5" max="50" step="1">
+                    <button id="confirm-map-selection" class="btn btn-primary" disabled>Confirm Selection</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Config Modal -->
+    <div id="config-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Supabase Configuration</h3>
+            </div>
+            <div class="modal-body">
+                <p>Enter your Supabase credentials to connect:</p>
+                <div class="form-group">
+                    <label>Project URL</label>
+                    <input type="text" id="config-url" class="input" placeholder="https://xxx.supabase.co">
+                </div>
+                <div class="form-group">
+                    <label>Anon Key</label>
+                    <input type="password" id="config-key" class="input" placeholder="eyJhbGciOiJIUzI1NiIs...">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="save-config" class="btn btn-primary">Connect</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Local libraries (avoid CDN blocking) -->
+    <script src="supabase.js"></script>
+    <script src="leaflet.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

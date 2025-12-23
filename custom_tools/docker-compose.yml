@@ -1,0 +1,137 @@
+# Rise Local Lead System - Custom Tools Stack
+# Run all Phase 2 intelligence gathering services
+
+version: '3.8'
+
+services:
+  # Phase 2D: TDLR License Verification
+  tdlr-scraper:
+    build:
+      context: ./tdlr_scraper
+      dockerfile: Dockerfile
+    container_name: tdlr-scraper
+    ports:
+      - "8001:8001"
+    restart: unless-stopped
+    networks:
+      - riselocal
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Phase 2E: BBB Reputation Analysis
+  bbb-scraper:
+    build:
+      context: ./bbb_scraper
+      dockerfile: Dockerfile
+    container_name: bbb-scraper
+    ports:
+      - "8002:8002"
+    restart: unless-stopped
+    networks:
+      - riselocal
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8002/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Phase 2B: PageSpeed Technical Scores
+  pagespeed-api:
+    build:
+      context: ./pagespeed_api
+      dockerfile: Dockerfile
+    container_name: pagespeed-api
+    ports:
+      - "8003:8003"
+    environment:
+      - GOOGLE_PAGESPEED_API_KEY=${GOOGLE_PAGESPEED_API_KEY:-}
+    restart: unless-stopped
+    networks:
+      - riselocal
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8003/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Phase 2A: Visual Analysis
+  screenshot-service:
+    build:
+      context: ./screenshot_service
+      dockerfile: Dockerfile
+    container_name: screenshot-service
+    ports:
+      - "8004:8004"
+    environment:
+      - GOOGLE_GEMINI_API_KEY=${GOOGLE_GEMINI_API_KEY:-}
+    restart: unless-stopped
+    networks:
+      - riselocal
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8004/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Phase 2D-Enhanced: Owner Extraction from Website
+  owner-extractor:
+    build:
+      context: ./owner_extractor
+      dockerfile: Dockerfile
+    container_name: owner-extractor
+    ports:
+      - "8005:8005"
+    environment:
+      - GOOGLE_GEMINI_API_KEY=${GOOGLE_GEMINI_API_KEY:-}
+    restart: unless-stopped
+    networks:
+      - riselocal
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8005/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  # Phase 2F: Address Verification (Residential vs Commercial)
+  address-verifier:
+    build:
+      context: ./address_verifier
+      dockerfile: Dockerfile
+    container_name: address-verifier
+    ports:
+      - "8006:8006"
+    environment:
+      - SMARTY_AUTH_ID=${SMARTY_AUTH_ID:-}
+      - SMARTY_AUTH_TOKEN=${SMARTY_AUTH_TOKEN:-}
+    restart: unless-stopped
+    networks:
+      - riselocal
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8006/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  riselocal:
+    driver: bridge
+
+# Usage:
+# docker compose up -d
+#
+# All services will be available at:
+# - TDLR Scraper: http://localhost:8001
+# - BBB Scraper: http://localhost:8002
+# - PageSpeed API: http://localhost:8003
+# - Screenshot Service: http://localhost:8004
+# - Owner Extractor: http://localhost:8005
+# - Address Verifier: http://localhost:8006
+#
+# Environment variables (optional):
+# - GOOGLE_PAGESPEED_API_KEY: For higher rate limits
+# - GOOGLE_GEMINI_API_KEY: For AI-powered visual analysis
+# - SMARTY_AUTH_ID: Smarty API Auth ID (for address verification)
+# - SMARTY_AUTH_TOKEN: Smarty API Auth Token (for address verification)
