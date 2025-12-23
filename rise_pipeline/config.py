@@ -33,7 +33,7 @@ if not env_path.exists():
 load_dotenv(env_path)
 
 # Supabase
-SUPABASE_URL = os.getenv("SUPABASE_URL", "https://jitawzicdwgbhatvjblh.supabase.co")
+SUPABASE_URL = os.getenv("SUPABASE_URL", "")
 SUPABASE_SERVICE_KEY = os.getenv("SUPABASE_SERVICE_KEY", "")
 
 # Clay
@@ -51,7 +51,7 @@ ADDRESS_VERIFIER_URL = os.getenv("ADDRESS_VERIFIER_URL", "http://localhost:8006"
 
 # Yext
 YEXT_API_KEY = os.getenv("YEXT_API_KEY", "")
-YEXT_ACCOUNT_ID = os.getenv("YEXT_ACCOUNT_ID", "939444")
+YEXT_ACCOUNT_ID = os.getenv("YEXT_ACCOUNT_ID", "")
 
 # Anthropic (Claude)
 ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
