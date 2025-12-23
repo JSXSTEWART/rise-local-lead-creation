@@ -41,9 +41,12 @@ parts/
 sdist/
 var/
 wheels/
+pip-wheel-metadata/
+share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 venv/
 .venv/
 ENV/
@@ -53,6 +56,11 @@ env/
 htmlcov/
 .tox/
 .mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+*.pyi
 
 # -----------------------------------------------------------------------------
 # Node
