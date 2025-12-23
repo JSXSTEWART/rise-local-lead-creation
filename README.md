@@ -162,6 +162,7 @@ Access the dashboard at `http://localhost:8080` to:
 - [Troubleshooting](docs/TROUBLESHOOTING.md) - Debug guide
 - [Dashboard Usage](docs/DASHBOARD_USAGE.md) - Dashboard guide
 - [Clay Workflow](docs/CLAY_WORKFLOW.md) - Clay integration steps
+- [GitHub Copilot Chat Cheat Sheet](docs/GITHUB_COPILOT_CHEAT_SHEET.md) - Quick reference for Copilot Chat commands
 
 ## Development
 
